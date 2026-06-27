@@ -8,9 +8,9 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
-  "engines": {
-  "node": ">=20.18.0"
-},
+    "engines": {
+    "node": ">=20.18.0"
+  },
   "dependencies": {
     "@angular/animations": "^17.3.0",
     "@angular/common": "^17.3.0",

@@ -1,4 +1,4 @@
-﻿import { CommonModule } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 
 @Component({
@@ -15,7 +15,7 @@ import { Component } from "@angular/core";
             The admin dashboard uses the same Clerk session as the main app. Sign in on the main site first, then come back here.
           </p>
           <div class="card-actions pt-2">
-            <a class="btn btn-primary" href="https://provelt-final.onrender.com" target="_blank" rel="noreferrer">
+            <a class="btn btn-primary" href="https://prove-it-b9lnm.sevalla.app" target="_blank" rel="noreferrer">
               Go to main app
             </a>
           </div>

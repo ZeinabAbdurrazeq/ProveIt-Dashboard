@@ -1,7 +1,7 @@
 ﻿export const environment = {
   production: true,
-  apiBaseUrl: "https://provelt-final.onrender.com/api/admin",
-  mainAppUrl: "https://provelt-final.onrender.com",
+  apiBaseUrl: "https://prove-it-b9lnm.sevalla.app/api/admin",
+  mainAppUrl: "https://prove-it-b9lnm.sevalla.app",
   clerkPublishableKey: "pk_test_ZWFzeS1zaHJpbXAtMi5jbGVyay5hY2NvdW50cy5kZXYk",
-  adminEmail: "gusionx40@gmail.com",
+  adminEmail: "provelt.administrator@gmail.com",
 };
