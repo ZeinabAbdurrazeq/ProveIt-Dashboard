@@ -1,4 +1,4 @@
-﻿import { Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { environment } from "../../../environments/environment";
 import { Clerk } from "@clerk/clerk-js";
 
@@ -8,14 +8,21 @@ export class ClerkAuthService {
 
   private async getClerk(): Promise<Clerk> {
     if (!this.clerk) {
-      this.clerk = new Clerk(environment.clerkPublishableKey);
-      await this.clerk.load();
+      // 'domain' goes into the constructor options
+      this.clerk = new Clerk(environment.clerkPublishableKey, {
+        domain: "proveit-dashboard-z3o7w.sevalla.app" // The admin dashboard URL
+      });
+      // 'isSatellite' and 'signInUrl' go into the load options
+      await this.clerk.load({
+        isSatellite: true,
+        signInUrl: "https://prove-it-b9lnm.sevalla.app/" // The main app URL
+      });
     }
 
     return this.clerk;
   }
 
-  async mountSignIn(element: HTMLElement): Promise<void> {
+  async mountSignIn(element: HTMLDivElement): Promise<void> {
     const clerk = await this.getClerk();
     clerk.mountSignIn(element);
   }
