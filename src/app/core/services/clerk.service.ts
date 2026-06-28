@@ -8,12 +8,13 @@ export class ClerkAuthService {
 
   private async getClerk(): Promise<Clerk> {
     if (!this.clerk) {
-      // @ts-ignore - Sevalla uses older TS definitions that don't expect 2 arguments
+      // 'domain' goes into the constructor options
+      // @ts-ignore - Bypass strict TypeScript checks for satellite options
       this.clerk = new Clerk(environment.clerkPublishableKey, {
         domain: "proveit-dashboard-z3o7w.sevalla.app" // The admin dashboard URL
       });
-      
-      // @ts-ignore - Sevalla uses older TS definitions that expect 0 arguments
+      // 'isSatellite' and 'signInUrl' go into the load options
+      // @ts-ignore - Bypass strict TypeScript checks for satellite options
       await this.clerk.load({
         isSatellite: true,
         signInUrl: "https://prove-it-b9lnm.sevalla.app/" // The main app URL
@@ -22,6 +23,8 @@ export class ClerkAuthService {
 
     return this.clerk;
   }
+
+  
 
   async mountSignIn(element: HTMLDivElement): Promise<void> {
     const clerk = await this.getClerk();
