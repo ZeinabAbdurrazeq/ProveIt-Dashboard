@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
+import { environment } from "../../../environments/environment";
 
 @Component({
   selector: "app-login-page",
@@ -15,7 +16,7 @@ import { Component } from "@angular/core";
             The admin dashboard uses the same Clerk session as the main app. Sign in on the main site first, then come back here.
           </p>
           <div class="card-actions pt-2">
-            <a class="btn btn-primary" href="https://prove-it-b9lnm.sevalla.app" target="_blank" rel="noreferrer">
+            <a class="btn btn-primary" [href]="mainAppUrl" target="_blank" rel="noreferrer">
               Go to main app
             </a>
           </div>
@@ -24,4 +25,6 @@ import { Component } from "@angular/core";
     </div>
   `,
 })
-export class LoginPageComponent { }
+export class LoginPageComponent {
+  mainAppUrl = environment.mainAppUrl;
+}

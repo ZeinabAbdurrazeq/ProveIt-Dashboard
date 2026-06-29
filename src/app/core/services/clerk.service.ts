@@ -8,16 +8,14 @@ export class ClerkAuthService {
 
   private async getClerk(): Promise<Clerk> {
     if (!this.clerk) {
-      // 'domain' goes into the constructor options
       // @ts-ignore - Bypass strict TypeScript checks for satellite options
       this.clerk = new Clerk(environment.clerkPublishableKey, {
-        domain: "proveit-dashboard-z3o7w.sevalla.app" // The admin dashboard URL
+        domain: environment.adminDashboardDomain,
       });
-      // 'isSatellite' and 'signInUrl' go into the load options
       // @ts-ignore - Bypass strict TypeScript checks for satellite options
       await this.clerk.load({
         isSatellite: true,
-        signInUrl: "https://prove-it-b9lnm.sevalla.app/" // The main app URL
+        signInUrl: environment.mainAppUrl,
       });
     }
 
