@@ -112,8 +112,8 @@ import { AdminInterview, InterviewQuestionBreakdown } from "../../core/models/ad
                                 {{ formatScore(question.score) }}
                               </span>
                             </div>
-                            <p *ngIf="question.userAnswer" class="mt-3 text-sm leading-6 text-base-content/80"><span class="font-semibold text-base-content">Answer:</span> {{ question.userAnswer }}</p>
-                            <p class="mt-2 text-sm leading-6 text-base-content/80"><span class="font-semibold text-base-content">AI feedback:</span> {{ question.aiFeedback || 'No feedback recorded.' }}</p>
+                            <p *ngIf="question.userAnswer" class="ai-message mt-3 text-sm leading-6 text-base-content/80"><span class="font-semibold text-base-content">Answer:</span> {{ question.userAnswer }}</p>
+                            <p class="ai-message mt-2 text-sm leading-6 text-base-content/80"><span class="font-semibold text-base-content">AI feedback:</span> {{ question.aiFeedback || 'No feedback recorded.' }}</p>
                           </article>
                         </div>
                         <ng-template #noQuestions>
@@ -129,7 +129,7 @@ import { AdminInterview, InterviewQuestionBreakdown } from "../../core/models/ad
                           <h3 class="mt-2 text-lg font-bold text-white">Overall feedback</h3>
                         </div>
                         <div class="rounded-3xl border border-base-300 bg-white/5 p-5">
-                          <p class="text-sm leading-7 text-base-content/80">{{ interview.overallFeedback || 'No overall feedback is available yet.' }}</p>
+                          <p class="ai-message text-sm leading-7 text-base-content/80">{{ interview.overallFeedback || 'No overall feedback is available yet.' }}</p>
                         </div>
                         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
                           <div class="rounded-3xl border border-base-300 bg-white/5 p-4">
@@ -278,5 +278,4 @@ export class AiInterviewsPageComponent implements OnInit {
     }).format(new Date(value));
   }
 }
-
 

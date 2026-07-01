@@ -27,7 +27,8 @@
         "dashboard-gradient": "radial-gradient(circle at top left, rgba(34,197,94,0.08), transparent 28%), radial-gradient(circle at top right, rgba(59,130,246,0.08), transparent 26%), linear-gradient(180deg, hsl(var(--b3)) 0%, hsl(var(--b1)) 100%)",
       },
       fontFamily: {
-        sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        sans: ["Manrope", "ui-sans-serif", "system-ui", "sans-serif"],
+        mono: ["JetBrains Mono", "ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "monospace"],
       },
     },
   },
