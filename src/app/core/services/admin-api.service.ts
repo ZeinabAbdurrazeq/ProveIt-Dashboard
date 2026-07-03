@@ -12,6 +12,10 @@ import {
   UserRoleUpdateResponse,
   UsersResponse,
   AdminLoginResponse,
+  AdminBlogPost,
+  BlogPostResponse,
+  BlogPostsResponse,
+  ApiMessageResponse,
 } from "../models/admin.models";
 import { Observable } from "rxjs";
 
@@ -86,6 +90,21 @@ export class AdminApiService {
   getProblemsStats(): Observable<ProblemsStatsResponse> {
     return this.http.get<ProblemsStatsResponse>(`${this.apiBaseUrl}/problems-stats`);
   }
+
+  getBlogPosts(search = ""): Observable<BlogPostsResponse> {
+    const params = search ? new HttpParams().set("search", search) : undefined;
+    return this.http.get<BlogPostsResponse>(`${this.apiBaseUrl}/blog-posts`, { params });
+  }
+
+  createBlogPost(post: Partial<AdminBlogPost>): Observable<BlogPostResponse> {
+    return this.http.post<BlogPostResponse>(`${this.apiBaseUrl}/blog-posts`, post);
+  }
+
+  updateBlogPost(id: string, post: Partial<AdminBlogPost>): Observable<BlogPostResponse> {
+    return this.http.put<BlogPostResponse>(`${this.apiBaseUrl}/blog-posts/${id}`, post);
+  }
+
+  deleteBlogPost(id: string): Observable<ApiMessageResponse> {
+    return this.http.delete<ApiMessageResponse>(`${this.apiBaseUrl}/blog-posts/${id}`);
+  }
 }
-
-

@@ -156,3 +156,35 @@ export interface ApiMessageResponse {
   msg: string;
 }
 
+export interface LocalizedText {
+  en: string;
+  ar: string;
+}
+
+export interface AdminBlogSection {
+  heading: LocalizedText;
+  body: LocalizedText;
+}
+
+export interface AdminBlogPost {
+  _id: string;
+  title: LocalizedText;
+  slug: string;
+  excerpt: LocalizedText;
+  category: LocalizedText;
+  readTime: LocalizedText;
+  author: LocalizedText;
+  content: AdminBlogSection[];
+  published: boolean;
+  publishedAt?: string | null;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface BlogPostsResponse {
+  posts: AdminBlogPost[];
+}
+
+export interface BlogPostResponse {
+  post: AdminBlogPost;
+}

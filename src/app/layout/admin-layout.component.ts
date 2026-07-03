@@ -119,6 +119,7 @@ export class AdminLayoutComponent implements OnInit {
     { label: "Users", path: "/users", icon: "◫" },
     { label: "Sessions", path: "/sessions", icon: "◎" },
     { label: "AI Interviews", path: "/ai-interviews", icon: "✦" },
+    { label: "Blog Posts", path: "/blog-posts", icon: "✎" },
   ];
 
   ngOnInit(): void {
@@ -159,4 +160,3 @@ export class AdminLayoutComponent implements OnInit {
     this.pageTitle = String(route.snapshot.data["title"] || "Dashboard");
   }
 }
-

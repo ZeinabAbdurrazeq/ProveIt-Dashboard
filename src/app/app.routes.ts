@@ -7,6 +7,7 @@ import { UsersPageComponent } from "./pages/users/users-page.component";
 import { SessionsPageComponent } from "./pages/sessions/sessions-page.component";
 import { AiInterviewsPageComponent } from "./pages/ai-interviews/ai-interviews-page.component";
 import { LoginPageComponent } from "./pages/login/login-page.component";
+import { BlogPostsPageComponent } from "./pages/blog-posts/blog-posts-page.component";
 
 export const routes: Routes = [
   {
@@ -24,6 +25,7 @@ export const routes: Routes = [
       { path: "users", component: UsersPageComponent, data: { title: "Users" } },
       { path: "sessions", component: SessionsPageComponent, data: { title: "Sessions" } },
       { path: "ai-interviews", component: AiInterviewsPageComponent, data: { title: "AI Interviews" } },
+      { path: "blog-posts", component: BlogPostsPageComponent, data: { title: "Blog Posts" } },
       { path: "**", redirectTo: "dashboard" },
     ],
   },
