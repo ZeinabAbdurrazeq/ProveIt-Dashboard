@@ -23,6 +23,24 @@
   color-scheme: dark;
 }
 
+body[data-theme] {
+  --admin-bg: hsl(var(--b2));
+  --admin-surface: hsl(var(--b1));
+  --admin-surface-hover: hsl(var(--b3));
+  --admin-border: hsl(var(--bc) / 0.16);
+  --admin-muted: hsl(var(--bc) / 0.58);
+  --admin-text: hsl(var(--bc));
+  --admin-primary: hsl(var(--p));
+  --admin-primary-hover: hsl(var(--p) / 0.86);
+  --admin-secondary: hsl(var(--s, var(--p)));
+  --admin-success: hsl(var(--su, 145 63% 49%));
+  --admin-warning: hsl(var(--wa, 39 100% 50%));
+  --admin-error: hsl(var(--er, 0 91% 71%));
+  --admin-shadow-sm: 0 1px 2px 0 hsl(var(--bc) / 0.08);
+  --admin-shadow-md: 0 12px 28px hsl(var(--bc) / 0.12);
+  color-scheme: light;
+}
+
 body[data-theme="corporate"] {
   --admin-bg: #f8fafc;
   --admin-surface: #ffffff;
@@ -308,6 +326,38 @@ article,
   box-shadow: var(--admin-shadow-sm);
 }
 
+.admin-theme-select {
+  display: inline-flex;
+  min-width: 11rem;
+  align-items: center;
+  gap: 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--admin-border);
+  background: var(--admin-bg);
+  color: var(--admin-muted);
+  padding: 0.2rem 0.65rem;
+}
+
+.admin-theme-select span {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.admin-theme-select select {
+  min-width: 0;
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--admin-text);
+  padding: 0.45rem 0.2rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
 .admin-panel {
   border-radius: var(--admin-radius);
   border: 1px solid var(--admin-border);
@@ -483,6 +533,7 @@ body[data-theme="corporate"] .bg-white\/10 {
 
 @media (max-width: 768px) {
   .admin-search-field,
+  .admin-theme-select,
   .admin-segmented {
     width: 100%;
   }

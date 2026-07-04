@@ -1,5 +1,6 @@
 ﻿import { CommonModule } from "@angular/common";
 import { Component, DestroyRef, OnInit, inject } from "@angular/core";
+import { FormsModule } from "@angular/forms";
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
 import { filter } from "rxjs";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
@@ -15,13 +16,18 @@ interface NavItem {
 }
 
 type AdminLanguage = "ar" | "en";
-type AdminTheme = "night" | "corporate";
 type AdminDensity = "comfortable" | "compact";
+
+const MAIN_THEME_STORAGE_KEY = "provelt-theme";
+const ADMIN_LANGUAGE_STORAGE_KEY = "provelt-admin-language";
+const ADMIN_DENSITY_STORAGE_KEY = "provelt-admin-density";
+const DEFAULT_THEME = "proveit";
+const DEFAULT_LANGUAGE: AdminLanguage = "en";
 
 @Component({
   selector: "app-admin-layout",
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [CommonModule, FormsModule, RouterOutlet, RouterLink, RouterLinkActive],
   template: `
     <div class="admin-shell min-h-screen bg-base-300 text-base-content">
       <div class="flex min-h-screen">
@@ -97,10 +103,12 @@ type AdminDensity = "comfortable" | "compact";
                   <input type="search" [placeholder]="text.search" />
                 </label>
 
-                <div class="admin-segmented" role="group" [attr.aria-label]="text.theme">
-                  <button type="button" [class.active]="currentTheme === 'corporate'" (click)="setTheme('corporate')">{{ text.light }}</button>
-                  <button type="button" [class.active]="currentTheme === 'night'" (click)="setTheme('night')">{{ text.dark }}</button>
-                </div>
+                <label class="admin-theme-select">
+                  <span>{{ text.theme }}</span>
+                  <select [ngModel]="currentTheme" (ngModelChange)="setTheme($event)">
+                    <option *ngFor="let theme of themes" [value]="theme">{{ theme }}</option>
+                  </select>
+                </label>
 
                 <div class="admin-segmented" role="group" [attr.aria-label]="text.language">
                   <button type="button" [class.active]="currentLanguage === 'ar'" (click)="setLanguage('ar')">عربي</button>
@@ -133,12 +141,44 @@ export class AdminLayoutComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   mobileMenuOpen = false;
-  pageTitle = "لوحة التحكم";
+  pageTitle = "Overview";
   adminEmail = environment.adminEmail;
   mainAppUrl = environment.mainAppUrl;
-  currentLanguage: AdminLanguage = "ar";
-  currentTheme: AdminTheme = "night";
+  currentLanguage: AdminLanguage = DEFAULT_LANGUAGE;
+  currentTheme = DEFAULT_THEME;
   currentDensity: AdminDensity = "comfortable";
+  themes = [
+    "proveit",
+    "forest",
+    "nord",
+    "night",
+    "business",
+    "luxury",
+    "dracula",
+    "emerald",
+    "cupcake",
+    "corporate",
+    "synthwave",
+    "retro",
+    "cyberpunk",
+    "valentine",
+    "halloween",
+    "garden",
+    "aqua",
+    "lofi",
+    "pastel",
+    "fantasy",
+    "wireframe",
+    "black",
+    "cmyk",
+    "autumn",
+    "acid",
+    "lemonade",
+    "coffee",
+    "winter",
+    "dim",
+    "sunset",
+  ];
 
   navItems: NavItem[] = [
     { labelAr: "الرئيسية", labelEn: "Overview", path: "/dashboard", icon: "▣" },
@@ -160,8 +200,6 @@ export class AdminLayoutComponent implements OnInit {
       openMenu: "فتح القائمة",
       search: "بحث سريع...",
       theme: "السمة",
-      light: "فاتح",
-      dark: "داكن",
       language: "اللغة",
       dataView: "عرض البيانات",
       comfortable: "واسع",
@@ -177,8 +215,6 @@ export class AdminLayoutComponent implements OnInit {
       openMenu: "Open menu",
       search: "Quick search...",
       theme: "Theme",
-      light: "Light",
-      dark: "Dark",
       language: "Language",
       dataView: "Data view",
       comfortable: "Comfort",
@@ -192,9 +228,9 @@ export class AdminLayoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.currentLanguage = this.readPreference<AdminLanguage>("adminLanguage", "ar", ["ar", "en"]);
-    this.currentTheme = this.readPreference<AdminTheme>("adminTheme", "night", ["night", "corporate"]);
-    this.currentDensity = this.readPreference<AdminDensity>("adminDensity", "comfortable", ["comfortable", "compact"]);
+    this.currentLanguage = this.readPreference<AdminLanguage>(ADMIN_LANGUAGE_STORAGE_KEY, DEFAULT_LANGUAGE, ["ar", "en"]);
+    this.currentTheme = this.readThemePreference();
+    this.currentDensity = this.readPreference<AdminDensity>(ADMIN_DENSITY_STORAGE_KEY, "comfortable", ["comfortable", "compact"]);
     this.applyPreferences();
     this.updateTitle();
 
@@ -215,20 +251,21 @@ export class AdminLayoutComponent implements OnInit {
 
   setLanguage(language: AdminLanguage): void {
     this.currentLanguage = language;
-    localStorage.setItem("adminLanguage", language);
+    localStorage.setItem(ADMIN_LANGUAGE_STORAGE_KEY, language);
     this.applyPreferences();
     this.updateTitle();
   }
 
-  setTheme(theme: AdminTheme): void {
+  setTheme(theme: string): void {
+    if (!this.themes.includes(theme)) return;
     this.currentTheme = theme;
-    localStorage.setItem("adminTheme", theme);
+    localStorage.setItem(MAIN_THEME_STORAGE_KEY, theme);
     this.applyPreferences();
   }
 
   setDensity(density: AdminDensity): void {
     this.currentDensity = density;
-    localStorage.setItem("adminDensity", density);
+    localStorage.setItem(ADMIN_DENSITY_STORAGE_KEY, density);
     this.applyPreferences();
   }
 
@@ -259,11 +296,17 @@ export class AdminLayoutComponent implements OnInit {
     root.lang = this.currentLanguage;
     root.dir = this.currentLanguage === "ar" ? "rtl" : "ltr";
     body.dataset["theme"] = this.currentTheme;
+    root.setAttribute("data-theme", this.currentTheme);
     body.classList.toggle("admin-density-compact", this.currentDensity === "compact");
   }
 
   private readPreference<T extends string>(key: string, fallback: T, allowed: readonly T[]): T {
     const value = localStorage.getItem(key) as T | null;
     return value && allowed.includes(value) ? value : fallback;
+  }
+
+  private readThemePreference(): string {
+    const stored = localStorage.getItem(MAIN_THEME_STORAGE_KEY);
+    return stored && this.themes.includes(stored) ? stored : DEFAULT_THEME;
   }
 }
