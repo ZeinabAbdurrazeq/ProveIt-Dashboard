@@ -82,56 +82,56 @@ const emptyForm = (): BlogForm => ({
           </div>
         </div>
 
-        <form class="admin-panel space-y-5 p-5" (ngSubmit)="savePost()">
+        <form class="admin-panel blog-editor-panel space-y-5 p-5" (ngSubmit)="savePost()">
           <div>
-            <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">{{ editingId ? 'Edit post' : 'Create post' }}</p>
+            <p class="text-sm uppercase tracking-[0.24em] text-base-content/70">{{ editingId ? 'Edit post' : 'Create post' }}</p>
             <h3 class="mt-2 text-xl font-bold text-white">{{ form.title.en || 'Untitled post' }}</h3>
           </div>
 
           <div class="grid gap-4 sm:grid-cols-2">
             <label class="space-y-2">
-              <span class="text-sm font-semibold text-base-content/70">Title EN</span>
+              <span class="blog-field-label">Title EN</span>
               <input class="admin-input" required [(ngModel)]="form.title.en" name="titleEn" (ngModelChange)="syncSlug()" />
             </label>
             <label class="space-y-2">
-              <span class="text-sm font-semibold text-base-content/70">Title AR</span>
+              <span class="blog-field-label">Title AR</span>
               <input class="admin-input" [(ngModel)]="form.title.ar" name="titleAr" dir="rtl" />
             </label>
           </div>
 
           <label class="space-y-2 block">
-            <span class="text-sm font-semibold text-base-content/70">Slug</span>
+            <span class="blog-field-label">Slug</span>
             <input class="admin-input" required [(ngModel)]="form.slug" name="slug" />
           </label>
 
           <div class="grid gap-4 sm:grid-cols-2">
             <label class="space-y-2">
-              <span class="text-sm font-semibold text-base-content/70">Category EN</span>
+              <span class="blog-field-label">Category EN</span>
               <input class="admin-input" [(ngModel)]="form.category.en" name="categoryEn" />
             </label>
             <label class="space-y-2">
-              <span class="text-sm font-semibold text-base-content/70">Category AR</span>
+              <span class="blog-field-label">Category AR</span>
               <input class="admin-input" [(ngModel)]="form.category.ar" name="categoryAr" dir="rtl" />
             </label>
           </div>
 
           <div class="grid gap-4 sm:grid-cols-2">
             <label class="space-y-2">
-              <span class="text-sm font-semibold text-base-content/70">Read time EN</span>
+              <span class="blog-field-label">Read time EN</span>
               <input class="admin-input" [(ngModel)]="form.readTime.en" name="readTimeEn" />
             </label>
             <label class="space-y-2">
-              <span class="text-sm font-semibold text-base-content/70">Author EN</span>
+              <span class="blog-field-label">Author EN</span>
               <input class="admin-input" [(ngModel)]="form.author.en" name="authorEn" />
             </label>
           </div>
 
           <label class="space-y-2 block">
-            <span class="text-sm font-semibold text-base-content/70">Excerpt EN</span>
+            <span class="blog-field-label">Excerpt EN</span>
             <textarea class="admin-input min-h-24" [(ngModel)]="form.excerpt.en" name="excerptEn"></textarea>
           </label>
           <label class="space-y-2 block">
-            <span class="text-sm font-semibold text-base-content/70">Excerpt AR</span>
+            <span class="blog-field-label">Excerpt AR</span>
             <textarea class="admin-input min-h-24" [(ngModel)]="form.excerpt.ar" name="excerptAr" dir="rtl"></textarea>
           </label>
 
@@ -140,9 +140,9 @@ const emptyForm = (): BlogForm => ({
               <h4 class="font-bold text-white">Content sections</h4>
               <button class="admin-button-secondary" type="button" (click)="addSection()">Add section</button>
             </div>
-            <div *ngFor="let section of form.content; let i = index" class="rounded-3xl border border-base-300 bg-white/5 p-4">
+            <div *ngFor="let section of form.content; let i = index" class="blog-section-card rounded-3xl p-4">
               <div class="mb-3 flex justify-between gap-3">
-                <span class="text-sm font-semibold text-base-content/70">Section {{ i + 1 }}</span>
+                <span class="blog-field-label">Section {{ i + 1 }}</span>
                 <button class="text-sm font-semibold text-red-200" type="button" (click)="removeSection(i)" [disabled]="form.content.length === 1">Remove</button>
               </div>
               <div class="grid gap-3">
@@ -169,6 +169,51 @@ const emptyForm = (): BlogForm => ({
       </section>
     </div>
   `,
+  styles: [`
+    .blog-editor-panel {
+      background: linear-gradient(180deg, hsl(var(--b1)) 0%, hsl(var(--b2) / 0.72) 100%);
+    }
+
+    .blog-editor-panel .admin-input {
+      border-color: hsl(var(--bc) / 0.18);
+      background: hsl(var(--b2));
+      color: hsl(var(--bc));
+      box-shadow: inset 0 1px 0 hsl(var(--bc) / 0.04);
+    }
+
+    .blog-editor-panel textarea.admin-input {
+      background: hsl(var(--b2) / 0.88);
+      line-height: 1.65;
+    }
+
+    .blog-editor-panel .admin-input:hover {
+      border-color: hsl(var(--bc) / 0.28);
+      background: hsl(var(--b2) / 0.94);
+    }
+
+    .blog-editor-panel .admin-input:focus {
+      border-color: hsl(var(--p));
+      background: hsl(var(--b1));
+      box-shadow: 0 0 0 3px hsl(var(--p) / 0.2), inset 0 1px 0 hsl(var(--bc) / 0.05);
+    }
+
+    .blog-editor-panel .admin-input::placeholder {
+      color: hsl(var(--bc) / 0.62);
+    }
+
+    .blog-field-label {
+      display: inline-flex;
+      color: hsl(var(--bc) / 0.86);
+      font-size: 0.875rem;
+      font-weight: 700;
+    }
+
+    .blog-section-card {
+      border: 1px solid hsl(var(--bc) / 0.14);
+      background: hsl(var(--b1) / 0.72);
+      box-shadow: inset 0 1px 0 hsl(var(--bc) / 0.04);
+    }
+  `],
 })
 export class BlogPostsPageComponent implements OnInit {
   private readonly api = inject(AdminApiService);
