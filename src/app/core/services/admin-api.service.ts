@@ -11,10 +11,15 @@ import {
   UserListQuery,
   UserRoleUpdateResponse,
   UsersResponse,
+  AdminUser,
+  AdminUserResponse,
   AdminLoginResponse,
+  AdminProblem,
   AdminBlogPost,
   BlogPostResponse,
   BlogPostsResponse,
+  ProblemResponse,
+  ProblemsResponse,
   ApiMessageResponse,
 } from "../models/admin.models";
 import { Observable } from "rxjs";
@@ -53,10 +58,22 @@ export class AdminApiService {
     return this.http.get<UsersResponse>(`${this.apiBaseUrl}/users`, { params });
   }
 
+  createUser(user: Partial<AdminUser>): Observable<AdminUserResponse> {
+    return this.http.post<AdminUserResponse>(`${this.apiBaseUrl}/users`, user);
+  }
+
+  updateUser(userId: string, user: Partial<AdminUser>): Observable<AdminUserResponse> {
+    return this.http.put<AdminUserResponse>(`${this.apiBaseUrl}/users/${userId}`, user);
+  }
+
   updateUserRole(userId: string, role: "user" | "admin"): Observable<UserRoleUpdateResponse> {
     return this.http.patch<UserRoleUpdateResponse>(`${this.apiBaseUrl}/users/${userId}/role`, {
       role,
     });
+  }
+
+  deleteUser(userId: string): Observable<ApiMessageResponse> {
+    return this.http.delete<ApiMessageResponse>(`${this.apiBaseUrl}/users/${userId}`);
   }
 
   getSessions(query: UserListQuery & { status?: string } = {}): Observable<SessionsResponse> {
@@ -89,6 +106,30 @@ export class AdminApiService {
 
   getProblemsStats(): Observable<ProblemsStatsResponse> {
     return this.http.get<ProblemsStatsResponse>(`${this.apiBaseUrl}/problems-stats`);
+  }
+
+  getProblems(query: UserListQuery & { difficulty?: string } = {}): Observable<ProblemsResponse> {
+    let params = new HttpParams();
+
+    Object.entries(query).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        params = params.set(key, String(value));
+      }
+    });
+
+    return this.http.get<ProblemsResponse>(`${this.apiBaseUrl}/problems`, { params });
+  }
+
+  createProblem(problem: Partial<AdminProblem>): Observable<ProblemResponse> {
+    return this.http.post<ProblemResponse>(`${this.apiBaseUrl}/problems`, problem);
+  }
+
+  updateProblem(id: string, problem: Partial<AdminProblem>): Observable<ProblemResponse> {
+    return this.http.put<ProblemResponse>(`${this.apiBaseUrl}/problems/${id}`, problem);
+  }
+
+  deleteProblem(id: string): Observable<ApiMessageResponse> {
+    return this.http.delete<ApiMessageResponse>(`${this.apiBaseUrl}/problems/${id}`);
   }
 
   getBlogPosts(search = ""): Observable<BlogPostsResponse> {

@@ -2,6 +2,7 @@
 export type SessionStatus = "active" | "completed";
 export type InterviewStatus = "in-progress" | "completed";
 export type SubscriptionPlan = "free" | "pro" | "premium";
+export type ProblemDifficulty = "Easy" | "Medium" | "Hard";
 
 export interface AdminLoginResponse {
   admin: {
@@ -17,6 +18,8 @@ export interface AdminUser {
   profileImage: string;
   clerkId: string;
   role: AdminRole;
+  score?: number;
+  level?: string;
   createdAt: string;
   updatedAt?: string;
 }
@@ -138,6 +141,51 @@ export interface ProblemsStatsResponse {
 
 export interface UserRoleUpdateResponse {
   user: AdminUser;
+}
+
+export interface AdminUserResponse {
+  user: AdminUser;
+}
+
+export interface AdminProblemExample {
+  input: string;
+  output: string;
+  explanation?: string;
+}
+
+export interface AdminProblem {
+  _id: string;
+  id: string;
+  title: string;
+  difficulty: ProblemDifficulty;
+  category: string;
+  description: {
+    text: string;
+    notes: string[];
+  };
+  examples: AdminProblemExample[];
+  constraints: string[];
+  starterCode: {
+    javascript: string;
+    python: string;
+    java: string;
+  };
+  expectedOutput: {
+    javascript: string;
+    python: string;
+    java: string;
+  };
+  active: boolean;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface ProblemsResponse extends PaginationMeta {
+  problems: AdminProblem[];
+}
+
+export interface ProblemResponse {
+  problem: AdminProblem;
 }
 
 export interface SessionListQuery {

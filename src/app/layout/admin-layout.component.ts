@@ -119,6 +119,7 @@ export class AdminLayoutComponent implements OnInit {
     { label: "Users", path: "/users", icon: "◫" },
     { label: "Sessions", path: "/sessions", icon: "◎" },
     { label: "AI Interviews", path: "/ai-interviews", icon: "✦" },
+    { label: "Problems", path: "/problems", icon: "⌘" },
     { label: "Blog Posts", path: "/blog-posts", icon: "✎" },
   ];
 
