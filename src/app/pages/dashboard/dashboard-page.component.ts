@@ -76,11 +76,10 @@ interface StatCard {
         <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
           <article
             *ngFor="let card of statCards"
-            class="admin-panel group relative overflow-hidden p-5 transition hover:-translate-y-1 hover:border-emerald-400/30 hover:bg-white/7"
-            [ngClass]="card.gradient"
+            class="admin-panel admin-metric-card group relative overflow-hidden p-5 transition hover:-translate-y-1"
           >
             <div
-              class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent_30%)] opacity-50"
+              class="admin-metric-glow absolute inset-0 opacity-60"
             ></div>
             <div class="relative z-10 flex items-start justify-between gap-4">
               <div>
@@ -93,7 +92,7 @@ interface StatCard {
                 <p class="mt-2 text-xs text-base-content/60">{{ card.hint }}</p>
               </div>
               <div
-                class="grid h-12 w-12 place-items-center rounded-2xl bg-white/10 text-2xl text-white shadow-lg backdrop-blur"
+                class="admin-metric-icon grid h-12 w-12 place-items-center rounded-2xl text-2xl shadow-lg backdrop-blur"
               >
                 {{ card.icon }}
               </div>
@@ -626,4 +625,3 @@ export class DashboardPageComponent implements OnInit {
     }).format(new Date(`${value}T00:00:00`));
   }
 }
-
