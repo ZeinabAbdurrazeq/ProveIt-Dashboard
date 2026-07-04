@@ -34,6 +34,6 @@
   },
   plugins: [require("daisyui")],
   daisyui: {
-    themes: ["forest"],
+    themes: ["night", "corporate"],
   },
 };

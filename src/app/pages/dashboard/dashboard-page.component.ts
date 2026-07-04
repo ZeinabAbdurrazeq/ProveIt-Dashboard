@@ -61,14 +61,14 @@ interface StatCard {
         *ngIf="error"
         class="admin-panel border-red-500/20 bg-red-500/10 p-6 text-red-100"
       >
-        <p class="text-lg font-semibold">We couldn’t load the dashboard.</p>
+        <p class="text-lg font-semibold">تعذر تحميل لوحة التحكم.</p>
         <p class="mt-2 text-sm text-red-200/80">{{ error }}</p>
         <button
           class="admin-button mt-4"
           type="button"
           (click)="loadDashboard()"
         >
-          Retry
+          إعادة المحاولة
         </button>
       </section>
 
@@ -103,16 +103,16 @@ interface StatCard {
 
         <div class="grid gap-6 xl:grid-cols-2">
           <section class="admin-panel p-5">
-            <div class="flex items-center justify-between gap-4">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">
-                  Trend
+                  الاتجاه
                 </p>
                 <h2 class="mt-2 text-xl font-bold text-white">
-                  Sessions over time
+                  الجلسات عبر الوقت
                 </h2>
               </div>
-              <span class="admin-chip">Last 30 days</span>
+              <span class="admin-chip">آخر 30 يوم</span>
             </div>
             <div class="mt-5 h-[320px]">
               <canvas
@@ -125,16 +125,16 @@ interface StatCard {
           </section>
 
           <section class="admin-panel p-5">
-            <div class="flex items-center justify-between gap-4">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">
-                  Trend
+                  الاتجاه
                 </p>
                 <h2 class="mt-2 text-xl font-bold text-white">
-                  AI interviews per day
+                  مقابلات الذكاء يوميًا
                 </h2>
               </div>
-              <span class="admin-chip">Last 30 days</span>
+              <span class="admin-chip">آخر 30 يوم</span>
             </div>
             <div class="mt-5 h-[320px]">
               <canvas
@@ -149,30 +149,30 @@ interface StatCard {
 
         <div class="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
           <section class="admin-panel p-5">
-            <div class="flex items-center justify-between gap-4">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">
-                  Leaderboard
+                  الترتيب
                 </p>
                 <h2 class="mt-2 text-xl font-bold text-white">
-                  Top 10 candidates
+                  أفضل 10 مرشحين
                 </h2>
               </div>
-              <span class="admin-chip">By overall average score</span>
+              <span class="admin-chip">حسب متوسط التقييم</span>
             </div>
 
             <div
               *ngIf="topCandidates.length; else noCandidates"
-              class="mt-5 overflow-hidden rounded-3xl border border-base-300"
+              class="mt-5 overflow-x-auto rounded-3xl border border-base-300"
             >
-              <table class="admin-table">
+              <table class="admin-table min-w-[760px]">
                 <thead class="bg-white/5">
                   <tr>
-                    <th class="admin-th">Rank</th>
-                    <th class="admin-th">Candidate</th>
-                    <th class="admin-th">Field</th>
-                    <th class="admin-th">Interviews</th>
-                    <th class="admin-th">Score</th>
+                    <th class="admin-th">الترتيب</th>
+                    <th class="admin-th">المرشح</th>
+                    <th class="admin-th">المجال</th>
+                    <th class="admin-th">المقابلات</th>
+                    <th class="admin-th">التقييم</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-white/10 bg-base-100">
@@ -191,10 +191,10 @@ interface StatCard {
                         />
                         <div>
                           <p class="font-semibold text-white">
-                            {{ candidate.userId?.name || "Unknown candidate" }}
+                            {{ candidate.userId?.name || "مرشح غير معروف" }}
                           </p>
                           <p class="text-xs text-base-content/60">
-                            {{ candidate.userId?.email || "No email" }}
+                            {{ candidate.userId?.email || "لا يوجد بريد" }}
                           </p>
                         </div>
                       </div>
@@ -226,7 +226,7 @@ interface StatCard {
               <div
                 class="mt-5 rounded-3xl border border-dashed border-base-300 bg-white/5 p-10 text-center text-base-content/60"
               >
-                No candidate profiles are available yet.
+                لا توجد ملفات مرشحين بعد.
               </div>
             </ng-template>
           </section>
@@ -234,10 +234,10 @@ interface StatCard {
           <section class="admin-panel p-5">
             <div>
               <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">
-                Subscriptions
+                الاشتراكات
               </p>
               <h2 class="mt-2 text-xl font-bold text-white">
-                Plan distribution
+                توزيع الخطط
               </h2>
             </div>
 
@@ -253,7 +253,7 @@ interface StatCard {
                     <p class="text-sm font-semibold capitalize text-white">
                       {{ plan.plan }}
                     </p>
-                    <p class="text-xs text-base-content/60">{{ plan.count }} users</p>
+                    <p class="text-xs text-base-content/60">{{ plan.count }} مستخدم</p>
                   </div>
                   <span class="text-sm font-semibold text-emerald-300"
                     >{{ plan.percentage }}%</span
@@ -292,7 +292,7 @@ interface StatCard {
             <div
               class="mt-5 rounded-[1.75rem] border border-base-300 bg-white/5 p-4"
             >
-              <p class="text-sm font-semibold text-white">Problem categories</p>
+              <p class="text-sm font-semibold text-white">تصنيفات المسائل</p>
               <div
                 *ngIf="problemStats.length; else noProblems"
                 class="mt-4 space-y-3"
@@ -304,14 +304,14 @@ interface StatCard {
                   <div>
                     <p class="font-medium text-white">{{ item.category }}</p>
                     <p class="text-xs text-base-content/60">
-                      {{ item.attempts }} attempts
+                      {{ item.attempts }} محاولة
                     </p>
                   </div>
                   <span
                     class="rounded-full px-3 py-1 text-xs font-bold"
                     [ngClass]="scoreBadgeClass(item.averageScore)"
                   >
-                    Avg {{ formatScore(item.averageScore) }}
+                    متوسط {{ formatScore(item.averageScore) }}
                   </span>
                 </div>
               </div>
@@ -319,7 +319,7 @@ interface StatCard {
                 <div
                   class="mt-4 rounded-2xl border border-dashed border-base-300 bg-[#08101c] p-4 text-sm text-base-content/60"
                 >
-                  No problem statistics yet.
+                  لا توجد إحصائيات مسائل بعد.
                 </div>
               </ng-template>
             </div>
@@ -495,50 +495,50 @@ export class DashboardPageComponent implements OnInit {
 
     this.statCards = [
       {
-        label: "Total Users",
+        label: "كل المستخدمين",
         value: stats.totalUsers,
         icon: "◫",
-        hint: "Registered accounts in the platform",
+        hint: "الحسابات المسجلة في المنصة",
         gradient:
           "bg-gradient-to-br from-cyan-500/20 via-slate-900 to-slate-950",
       },
       {
-        label: "Total Sessions",
+        label: "كل الجلسات",
         value: stats.totalSessions,
         icon: "◎",
-        hint: "Coding sessions created so far",
+        hint: "جلسات البرمجة التي تم إنشاؤها",
         gradient:
           "bg-gradient-to-br from-violet-500/20 via-slate-900 to-slate-950",
       },
       {
-        label: "AI Interviews",
+        label: "مقابلات الذكاء",
         value: stats.totalInterviews,
         icon: "✦",
-        hint: "Interview runs stored in the system",
+        hint: "المقابلات المخزنة في النظام",
         gradient:
           "bg-gradient-to-br from-amber-500/20 via-slate-900 to-slate-950",
       },
       {
-        label: "Avg AI Score",
+        label: "متوسط الذكاء",
         value: Math.round(stats.averageAiScore),
         icon: "◔",
-        hint: "Average score across completed interviews",
+        hint: "متوسط نتائج المقابلات المكتملة",
         gradient:
           "bg-gradient-to-br from-emerald-500/20 via-slate-900 to-slate-950",
       },
       {
-        label: "Active Subscriptions",
+        label: "الاشتراكات النشطة",
         value: stats.activeSubscriptions,
         icon: "⎔",
-        hint: "Paid plans currently active",
+        hint: "الخطط المدفوعة النشطة حاليًا",
         gradient:
           "bg-gradient-to-br from-sky-500/20 via-slate-900 to-slate-950",
       },
       {
-        label: "Pending Invitations",
+        label: "الدعوات المعلقة",
         value: stats.pendingInvitations,
         icon: "⌁",
-        hint: "Waiting for response",
+        hint: "بانتظار الرد",
         gradient:
           "bg-gradient-to-br from-rose-500/20 via-slate-900 to-slate-950",
       },
@@ -579,7 +579,7 @@ export class DashboardPageComponent implements OnInit {
   }
 
   formatCompact(value: number): string {
-    return new Intl.NumberFormat("en", {
+    return new Intl.NumberFormat("ar", {
       notation: "compact",
       maximumFractionDigits: 1,
     }).format(value || 0);
@@ -620,11 +620,10 @@ export class DashboardPageComponent implements OnInit {
   }
 
   formatDate(value: string): string {
-    return new Intl.DateTimeFormat("en", {
+    return new Intl.DateTimeFormat("ar", {
       month: "short",
       day: "numeric",
     }).format(new Date(`${value}T00:00:00`));
   }
 }
-
 

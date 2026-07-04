@@ -15,16 +15,16 @@ import { AdminInterview, InterviewQuestionBreakdown } from "../../core/models/ad
       <section class="admin-panel p-5">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">Management</p>
-            <h2 class="mt-2 text-2xl font-bold text-white">AI interviews</h2>
-            <p class="mt-2 text-sm text-base-content/60">Inspect scores and expand each interview for a full question breakdown.</p>
+            <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">الإدارة</p>
+            <h2 class="mt-2 text-2xl font-bold text-white">مقابلات الذكاء</h2>
+            <p class="mt-2 text-sm text-base-content/60">راجع التقييمات وافتح كل مقابلة لعرض تفاصيل الأسئلة.</p>
           </div>
           <label class="flex w-full flex-col gap-2 sm:max-w-xs">
-            <span class="text-sm text-base-content/60">Status filter</span>
+            <span class="text-sm text-base-content/60">تصفية الحالة</span>
             <select class="admin-input" [(ngModel)]="statusFilter" (change)="applyFilter()">
-              <option value="all">All</option>
-              <option value="in-progress">In progress</option>
-              <option value="completed">Completed</option>
+              <option value="all">الكل</option>
+              <option value="in-progress">قيد التنفيذ</option>
+              <option value="completed">مكتملة</option>
             </select>
           </label>
         </div>
@@ -43,22 +43,22 @@ import { AdminInterview, InterviewQuestionBreakdown } from "../../core/models/ad
       </section>
 
       <section *ngIf="error" class="admin-panel border-red-500/20 bg-red-500/10 p-6 text-red-100">
-        <p class="text-lg font-semibold">Couldn’t load AI interviews.</p>
+        <p class="text-lg font-semibold">تعذر تحميل مقابلات الذكاء.</p>
         <p class="mt-2 text-sm text-red-200/80">{{ error }}</p>
-        <button class="admin-button mt-4" type="button" (click)="loadInterviews()">Retry</button>
+        <button class="admin-button mt-4" type="button" (click)="loadInterviews()">إعادة المحاولة</button>
       </section>
 
       <section *ngIf="!loading && !error" class="admin-panel overflow-hidden p-0">
         <div *ngIf="interviews.length; else emptyInterviews" class="overflow-x-auto">
-          <table class="admin-table">
+          <table class="admin-table min-w-[860px]">
             <thead class="bg-white/5">
               <tr>
-                <th class="admin-th">Candidate</th>
-                <th class="admin-th">Field</th>
-                <th class="admin-th">Score</th>
-                <th class="admin-th">Questions</th>
-                <th class="admin-th">Status</th>
-                <th class="admin-th">Date</th>
+                <th class="admin-th">المرشح</th>
+                <th class="admin-th">المجال</th>
+                <th class="admin-th">التقييم</th>
+                <th class="admin-th">الأسئلة</th>
+                <th class="admin-th">الحالة</th>
+                <th class="admin-th">التاريخ</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-white/10 bg-base-100">
@@ -72,8 +72,8 @@ import { AdminInterview, InterviewQuestionBreakdown } from "../../core/models/ad
                         class="h-10 w-10 rounded-2xl border border-base-300 object-cover"
                       />
                       <div>
-                        <p class="font-semibold text-white">{{ interview.userId?.name || 'Unknown candidate' }}</p>
-                        <p class="text-xs text-base-content/60">{{ interview.userId?.email || 'No email' }}</p>
+                        <p class="font-semibold text-white">{{ interview.userId?.name || 'مرشح غير معروف' }}</p>
+                        <p class="text-xs text-base-content/60">{{ interview.userId?.email || 'لا يوجد بريد' }}</p>
                       </div>
                     </div>
                   </td>
@@ -88,7 +88,7 @@ import { AdminInterview, InterviewQuestionBreakdown } from "../../core/models/ad
                   <td class="admin-td font-semibold text-base-content">{{ interview.questions.length }}</td>
                   <td class="admin-td">
                     <span class="rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.18em]" [ngClass]="statusBadgeClass(interview.status)">
-                      {{ interview.status }}
+                      {{ statusLabel(interview.status) }}
                     </span>
                   </td>
                   <td class="admin-td text-base-content/80">{{ formatDate(interview.createdAt) }}</td>
@@ -98,8 +98,8 @@ import { AdminInterview, InterviewQuestionBreakdown } from "../../core/models/ad
                     <div class="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
                       <div class="space-y-4">
                         <div>
-                          <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">Question breakdown</p>
-                          <h3 class="mt-2 text-lg font-bold text-white">Per-question feedback</h3>
+                          <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">تفاصيل الأسئلة</p>
+                          <h3 class="mt-2 text-lg font-bold text-white">تقييم كل سؤال</h3>
                         </div>
                         <div *ngIf="interview.questions.length; else noQuestions" class="space-y-3">
                           <article *ngFor="let question of interview.questions" class="rounded-3xl border border-base-300 bg-white/5 p-4">
@@ -112,38 +112,38 @@ import { AdminInterview, InterviewQuestionBreakdown } from "../../core/models/ad
                                 {{ formatScore(question.score) }}
                               </span>
                             </div>
-                            <p *ngIf="question.userAnswer" class="ai-message mt-3 text-sm leading-6 text-base-content/80"><span class="font-semibold text-base-content">Answer:</span> {{ question.userAnswer }}</p>
-                            <p class="ai-message mt-2 text-sm leading-6 text-base-content/80"><span class="font-semibold text-base-content">AI feedback:</span> {{ question.aiFeedback || 'No feedback recorded.' }}</p>
+                            <p *ngIf="question.userAnswer" class="ai-message mt-3 text-sm leading-6 text-base-content/80"><span class="font-semibold text-base-content">الإجابة:</span> {{ question.userAnswer }}</p>
+                            <p class="ai-message mt-2 text-sm leading-6 text-base-content/80"><span class="font-semibold text-base-content">تعليق الذكاء:</span> {{ question.aiFeedback || 'لا يوجد تعليق مسجل.' }}</p>
                           </article>
                         </div>
                         <ng-template #noQuestions>
                           <div class="rounded-3xl border border-dashed border-base-300 bg-white/5 p-6 text-sm text-base-content/60">
-                            This interview has no question breakdown yet.
+                            لا توجد تفاصيل أسئلة لهذه المقابلة بعد.
                           </div>
                         </ng-template>
                       </div>
 
                       <div class="space-y-4">
                         <div>
-                          <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">Summary</p>
-                          <h3 class="mt-2 text-lg font-bold text-white">Overall feedback</h3>
+                          <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">الملخص</p>
+                          <h3 class="mt-2 text-lg font-bold text-white">التقييم العام</h3>
                         </div>
                         <div class="rounded-3xl border border-base-300 bg-white/5 p-5">
-                          <p class="ai-message text-sm leading-7 text-base-content/80">{{ interview.overallFeedback || 'No overall feedback is available yet.' }}</p>
+                          <p class="ai-message text-sm leading-7 text-base-content/80">{{ interview.overallFeedback || 'لا يوجد تقييم عام بعد.' }}</p>
                         </div>
                         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
                           <div class="rounded-3xl border border-base-300 bg-white/5 p-4">
-                            <p class="text-xs uppercase tracking-[0.24em] text-base-content/60">Strengths</p>
+                            <p class="text-xs uppercase tracking-[0.24em] text-base-content/60">نقاط القوة</p>
                             <div class="mt-3 flex flex-wrap gap-2">
                               <span *ngFor="let item of interview.strengths" class="admin-chip">{{ item }}</span>
-                              <span *ngIf="!interview.strengths.length" class="text-sm text-base-content/60">None recorded</span>
+                              <span *ngIf="!interview.strengths.length" class="text-sm text-base-content/60">لا يوجد</span>
                             </div>
                           </div>
                           <div class="rounded-3xl border border-base-300 bg-white/5 p-4">
-                            <p class="text-xs uppercase tracking-[0.24em] text-base-content/60">Weaknesses</p>
+                            <p class="text-xs uppercase tracking-[0.24em] text-base-content/60">نقاط الضعف</p>
                             <div class="mt-3 flex flex-wrap gap-2">
                               <span *ngFor="let item of interview.weaknesses" class="admin-chip">{{ item }}</span>
-                              <span *ngIf="!interview.weaknesses.length" class="text-sm text-base-content/60">None recorded</span>
+                              <span *ngIf="!interview.weaknesses.length" class="text-sm text-base-content/60">لا يوجد</span>
                             </div>
                           </div>
                         </div>
@@ -158,17 +158,17 @@ import { AdminInterview, InterviewQuestionBreakdown } from "../../core/models/ad
 
         <ng-template #emptyInterviews>
           <div class="p-12 text-center text-base-content/60">
-            <p class="text-lg font-semibold text-white">No AI interviews found</p>
-            <p class="mt-2 text-sm">There are no interviews for the selected filter.</p>
+            <p class="text-lg font-semibold text-white">لا توجد مقابلات ذكاء</p>
+            <p class="mt-2 text-sm">لا توجد مقابلات مطابقة للتصفية الحالية.</p>
           </div>
         </ng-template>
       </section>
 
       <section class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p class="text-sm text-base-content/60">Page {{ page }} of {{ totalPages }}</p>
+        <p class="text-sm text-base-content/60">صفحة {{ page }} من {{ totalPages }}</p>
         <div class="flex gap-2">
-          <button class="admin-button-secondary" type="button" [disabled]="page <= 1 || loading" (click)="goToPage(page - 1)">Previous</button>
-          <button class="admin-button-secondary" type="button" [disabled]="page >= totalPages || loading" (click)="goToPage(page + 1)">Next</button>
+          <button class="admin-button-secondary" type="button" [disabled]="page <= 1 || loading" (click)="goToPage(page - 1)">السابق</button>
+          <button class="admin-button-secondary" type="button" [disabled]="page >= totalPages || loading" (click)="goToPage(page + 1)">التالي</button>
         </div>
       </section>
     </div>
@@ -234,7 +234,7 @@ export class AiInterviewsPageComponent implements OnInit {
           this.totalPages = response.totalPages;
         },
         error: (error) => {
-          this.error = error?.error?.msg || "The AI interviews table could not be loaded.";
+          this.error = error?.error?.msg || "تعذر تحميل جدول مقابلات الذكاء.";
         },
       });
   }
@@ -264,12 +264,16 @@ export class AiInterviewsPageComponent implements OnInit {
       : "border-sky-400/20 bg-sky-400/10 text-sky-300";
   }
 
+  statusLabel(status: string): string {
+    return status === "completed" ? "مكتملة" : "قيد التنفيذ";
+  }
+
   formatScore(value: number): string {
     return value >= 10 ? `${Math.round(value)}%` : value.toFixed(1);
   }
 
   formatDate(value: string): string {
-    return new Intl.DateTimeFormat("en", {
+    return new Intl.DateTimeFormat("ar", {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -278,4 +282,3 @@ export class AiInterviewsPageComponent implements OnInit {
     }).format(new Date(value));
   }
 }
-

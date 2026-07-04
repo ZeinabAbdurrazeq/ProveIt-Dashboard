@@ -15,16 +15,16 @@ import { AdminSession } from "../../core/models/admin.models";
       <section class="admin-panel p-5">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">Management</p>
-            <h2 class="mt-2 text-2xl font-bold text-white">Sessions</h2>
-            <p class="mt-2 text-sm text-base-content/60">Filter by status and inspect host/participant details.</p>
+            <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">الإدارة</p>
+            <h2 class="mt-2 text-2xl font-bold text-white">الجلسات</h2>
+            <p class="mt-2 text-sm text-base-content/60">تصفية الجلسات ومراجعة بيانات المضيف والمشارك.</p>
           </div>
           <label class="flex w-full flex-col gap-2 sm:max-w-xs">
-            <span class="text-sm text-base-content/60">Status filter</span>
+            <span class="text-sm text-base-content/60">تصفية الحالة</span>
             <select class="admin-input" [(ngModel)]="statusFilter" (change)="applyFilter()">
-              <option value="all">All</option>
-              <option value="active">Active</option>
-              <option value="completed">Completed</option>
+              <option value="all">الكل</option>
+              <option value="active">نشطة</option>
+              <option value="completed">مكتملة</option>
             </select>
           </label>
         </div>
@@ -44,22 +44,22 @@ import { AdminSession } from "../../core/models/admin.models";
       </section>
 
       <section *ngIf="error" class="admin-panel border-red-500/20 bg-red-500/10 p-6 text-red-100">
-        <p class="text-lg font-semibold">Couldn’t load sessions.</p>
+        <p class="text-lg font-semibold">تعذر تحميل الجلسات.</p>
         <p class="mt-2 text-sm text-red-200/80">{{ error }}</p>
-        <button class="admin-button mt-4" type="button" (click)="loadSessions()">Retry</button>
+        <button class="admin-button mt-4" type="button" (click)="loadSessions()">إعادة المحاولة</button>
       </section>
 
       <section *ngIf="!loading && !error" class="admin-panel overflow-hidden p-0">
         <div *ngIf="sessions.length; else emptySessions" class="overflow-x-auto">
-          <table class="admin-table">
+          <table class="admin-table min-w-[760px]">
             <thead class="bg-white/5">
               <tr>
-                <th class="admin-th">Host</th>
-                <th class="admin-th">Participant</th>
-                <th class="admin-th">Problem</th>
-                <th class="admin-th">Difficulty</th>
-                <th class="admin-th">Status</th>
-                <th class="admin-th">Date</th>
+                <th class="admin-th">المضيف</th>
+                <th class="admin-th">المشارك</th>
+                <th class="admin-th">المسألة</th>
+                <th class="admin-th">المستوى</th>
+                <th class="admin-th">الحالة</th>
+                <th class="admin-th">التاريخ</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-white/10 bg-base-100">
@@ -68,7 +68,7 @@ import { AdminSession } from "../../core/models/admin.models";
                   <div class="flex items-center gap-3">
                     <img [src]="session.host?.profileImage || defaultAvatar" [alt]="session.host?.name || 'Host'" class="h-10 w-10 rounded-2xl border border-base-300 object-cover" />
                     <div>
-                      <p class="font-semibold text-white">{{ session.host?.name || 'Unknown host' }}</p>
+                      <p class="font-semibold text-white">{{ session.host?.name || 'مضيف غير معروف' }}</p>
                       <p class="text-xs text-base-content/60">{{ session.host?.email || '-' }}</p>
                     </div>
                   </div>
@@ -77,20 +77,20 @@ import { AdminSession } from "../../core/models/admin.models";
                   <div class="flex items-center gap-3">
                     <img [src]="session.participant?.profileImage || defaultAvatar" [alt]="session.participant?.name || 'Participant'" class="h-10 w-10 rounded-2xl border border-base-300 object-cover" />
                     <div>
-                      <p class="font-semibold text-white">{{ session.participant?.name || 'Pending participant' }}</p>
-                      <p class="text-xs text-base-content/60">{{ session.participant?.email || 'Waiting for join' }}</p>
+                      <p class="font-semibold text-white">{{ session.participant?.name || 'مشارك منتظر' }}</p>
+                      <p class="text-xs text-base-content/60">{{ session.participant?.email || 'بانتظار الانضمام' }}</p>
                     </div>
                   </div>
                 </td>
                 <td class="admin-td text-base-content/80">{{ session.problem }}</td>
                 <td class="admin-td">
                   <span class="rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.18em]" [ngClass]="difficultyBadgeClass(session.difficulty)">
-                    {{ session.difficulty }}
+                    {{ difficultyLabel(session.difficulty) }}
                   </span>
                 </td>
                 <td class="admin-td">
                   <span class="rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.18em]" [ngClass]="statusBadgeClass(session.status)">
-                    {{ session.status }}
+                    {{ statusLabel(session.status) }}
                   </span>
                 </td>
                 <td class="admin-td text-base-content/80">{{ formatDate(session.createdAt) }}</td>
@@ -101,17 +101,17 @@ import { AdminSession } from "../../core/models/admin.models";
 
         <ng-template #emptySessions>
           <div class="p-12 text-center text-base-content/60">
-            <p class="text-lg font-semibold text-white">No sessions found</p>
-            <p class="mt-2 text-sm">There are no sessions for the selected filter.</p>
+            <p class="text-lg font-semibold text-white">لا توجد جلسات</p>
+            <p class="mt-2 text-sm">لا توجد جلسات مطابقة للتصفية الحالية.</p>
           </div>
         </ng-template>
       </section>
 
       <section class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p class="text-sm text-base-content/60">Page {{ page }} of {{ totalPages }}</p>
+        <p class="text-sm text-base-content/60">صفحة {{ page }} من {{ totalPages }}</p>
         <div class="flex gap-2">
-          <button class="admin-button-secondary" type="button" [disabled]="page <= 1 || loading" (click)="goToPage(page - 1)">Previous</button>
-          <button class="admin-button-secondary" type="button" [disabled]="page >= totalPages || loading" (click)="goToPage(page + 1)">Next</button>
+          <button class="admin-button-secondary" type="button" [disabled]="page <= 1 || loading" (click)="goToPage(page - 1)">السابق</button>
+          <button class="admin-button-secondary" type="button" [disabled]="page >= totalPages || loading" (click)="goToPage(page + 1)">التالي</button>
         </div>
       </section>
     </div>
@@ -170,7 +170,7 @@ export class SessionsPageComponent implements OnInit {
           this.totalPages = response.totalPages;
         },
         error: (error) => {
-          this.error = error?.error?.msg || "The sessions table could not be loaded.";
+          this.error = error?.error?.msg || "تعذر تحميل جدول الجلسات.";
         },
       });
   }
@@ -187,6 +187,16 @@ export class SessionsPageComponent implements OnInit {
     return "border-emerald-400/20 bg-emerald-400/10 text-emerald-300";
   }
 
+  difficultyLabel(difficulty: string): string {
+    if (difficulty === "hard") return "صعب";
+    if (difficulty === "medium") return "متوسط";
+    return "سهل";
+  }
+
+  statusLabel(status: string): string {
+    return status === "completed" ? "مكتملة" : "نشطة";
+  }
+
   statusBadgeClass(status: string): string {
     return status === "completed"
       ? "border-emerald-400/20 bg-emerald-400/10 text-emerald-300"
@@ -194,7 +204,7 @@ export class SessionsPageComponent implements OnInit {
   }
 
   formatDate(value: string): string {
-    return new Intl.DateTimeFormat("en", {
+    return new Intl.DateTimeFormat("ar", {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -203,5 +213,4 @@ export class SessionsPageComponent implements OnInit {
     }).format(new Date(value));
   }
 }
-
 

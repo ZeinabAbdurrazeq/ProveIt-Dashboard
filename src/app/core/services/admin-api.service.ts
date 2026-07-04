@@ -6,6 +6,7 @@ import {
   InterviewsResponse,
   ProblemsStatsResponse,
   SessionsResponse,
+  SubmissionsResponse,
   TimeSeriesResponse,
   TopCandidatesResponse,
   UserListQuery,
@@ -98,6 +99,20 @@ export class AdminApiService {
     });
 
     return this.http.get<InterviewsResponse>(`${this.apiBaseUrl}/ai-interviews`, { params });
+  }
+
+  getSubmissions(
+    query: UserListQuery & { status?: string; difficulty?: string } = {},
+  ): Observable<SubmissionsResponse> {
+    let params = new HttpParams();
+
+    Object.entries(query).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        params = params.set(key, String(value));
+      }
+    });
+
+    return this.http.get<SubmissionsResponse>(`${this.apiBaseUrl}/submissions`, { params });
   }
 
   getTopCandidates(): Observable<TopCandidatesResponse> {

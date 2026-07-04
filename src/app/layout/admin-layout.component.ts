@@ -29,9 +29,8 @@ interface NavItem {
         ></div>
 
         <aside
-          class="fixed inset-y-0 left-0 z-50 flex w-80 flex-col border-r border-base-300 bg-base-100/90 px-5 py-6 transition-all duration-300 lg:static lg:z-auto lg:translate-x-0"
-          [ngClass]="isCollapsed ? 'lg:w-24 lg:px-3' : ''"
-          [class.-translate-x-full]="!mobileMenuOpen"
+          class="fixed inset-y-0 right-0 z-50 flex w-80 flex-col border-l border-base-300 bg-base-100/95 px-5 py-6 transition-all duration-300 lg:static lg:z-auto lg:translate-x-0"
+          [class.translate-x-full]="!mobileMenuOpen"
           [class.translate-x-0]="mobileMenuOpen"
         >
           <div class="flex items-center justify-between gap-3">
@@ -39,14 +38,11 @@ interface NavItem {
               <div class="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-emerald-400 to-cyan-400 text-xl font-black text-base-content shadow-glow">
                 P
               </div>
-              <div [class.hidden]="isCollapsed" class="min-w-0">
+              <div class="min-w-0">
                 <p class="text-xl font-extrabold tracking-tight">ProveIt</p>
-                <p class="text-xs uppercase tracking-[0.25em] text-base-content/60">Admin Console</p>
+                <p class="text-xs uppercase tracking-[0.25em] text-base-content/60">لوحة الإدارة</p>
               </div>
             </div>
-            <button class="admin-button-secondary px-3 py-2 lg:flex" type="button" (click)="toggleCollapse()">
-              <span class="text-base">☰</span>
-            </button>
           </div>
 
           <nav class="mt-8 flex-1 space-y-2 overflow-y-auto">
@@ -59,23 +55,27 @@ interface NavItem {
               (click)="closeMobileMenu()"
             >
               <span class="grid h-10 w-10 place-items-center rounded-xl bg-white/5 text-lg transition group-hover:bg-white/10">{{ item.icon }}</span>
-              <span [class.hidden]="isCollapsed" class="whitespace-nowrap">{{ item.label }}</span>
+              <span class="whitespace-nowrap">{{ item.label }}</span>
             </a>
           </nav>
 
-          <div class="space-y-4 border-t border-base-300 pt-4">
-            <div class="rounded-2xl border border-base-300 bg-white/5 p-4" [class.hidden]="isCollapsed">
-              <p class="text-sm font-semibold text-white">Admin access</p>
-              <p class="mt-1 text-xs leading-5 text-base-content/60">Signed in with Clerk. Logout sends you back to the main app.</p>
+          <div class="space-y-3 border-t border-base-300 pt-4">
+            <div class="rounded-2xl border border-base-300 bg-white/5 p-4">
+              <p class="text-sm font-semibold text-white">صلاحيات الإدارة</p>
+              <p class="mt-1 text-xs leading-5 text-base-content/60">الجلسة مشتركة مع Clerk في الموقع الرئيسي.</p>
             </div>
+            <a class="admin-button-secondary w-full justify-start" [href]="mainAppUrl">
+              <span>↗</span>
+              <span>العودة للموقع</span>
+            </a>
             <button class="admin-button-secondary w-full justify-start" type="button" (click)="logout()">
               <span>⎋</span>
-              <span [class.hidden]="isCollapsed">Logout</span>
+              <span>تسجيل الخروج</span>
             </button>
           </div>
         </aside>
 
-        <div class="flex min-h-screen flex-1 flex-col lg:pl-0" [ngClass]="isCollapsed ? 'lg:ml-24' : ''">
+        <div class="flex min-h-screen min-w-0 flex-1 flex-col lg:pl-0">
           <header class="sticky top-0 z-30 border-b border-base-300 bg-base-100/90 px-4 py-4 backdrop-blur-xl sm:px-6 lg:px-8">
             <div class="flex items-center justify-between gap-4">
               <div class="flex items-center gap-3">
@@ -87,7 +87,7 @@ interface NavItem {
               </div>
 
               <div class="flex items-center gap-3">
-                <span class="admin-chip">Admin</span>
+                <span class="admin-chip">مدير</span>
                 <span class="hidden rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-2 text-sm font-semibold text-emerald-300 sm:inline-flex">
                   {{ adminEmail }}
                 </span>
@@ -109,18 +109,19 @@ export class AdminLayoutComponent implements OnInit {
   private readonly clerkAuth = inject(ClerkAuthService);
   private readonly destroyRef = inject(DestroyRef);
 
-  isCollapsed = false;
   mobileMenuOpen = false;
-  pageTitle = "Dashboard";
+  pageTitle = "لوحة التحكم";
   adminEmail = environment.adminEmail;
+  mainAppUrl = environment.mainAppUrl;
 
   navItems: NavItem[] = [
-    { label: "Dashboard", path: "/dashboard", icon: "▣" },
-    { label: "Users", path: "/users", icon: "◫" },
-    { label: "Sessions", path: "/sessions", icon: "◎" },
-    { label: "AI Interviews", path: "/ai-interviews", icon: "✦" },
-    { label: "Problems", path: "/problems", icon: "⌘" },
-    { label: "Blog Posts", path: "/blog-posts", icon: "✎" },
+    { label: "الرئيسية", path: "/dashboard", icon: "▣" },
+    { label: "المستخدمون", path: "/users", icon: "◫" },
+    { label: "الجلسات", path: "/sessions", icon: "◎" },
+    { label: "مقابلات الذكاء", path: "/ai-interviews", icon: "✦" },
+    { label: "المسائل", path: "/problems", icon: "⌘" },
+    { label: "التسليمات", path: "/submissions", icon: "✓" },
+    { label: "المدونة", path: "/blog-posts", icon: "✎" },
   ];
 
   ngOnInit(): void {
@@ -135,10 +136,6 @@ export class AdminLayoutComponent implements OnInit {
         this.updateTitle();
         this.mobileMenuOpen = false;
       });
-  }
-
-  toggleCollapse(): void {
-    this.isCollapsed = !this.isCollapsed;
   }
 
   closeMobileMenu(): void {
@@ -158,6 +155,6 @@ export class AdminLayoutComponent implements OnInit {
       route = route.firstChild;
     }
 
-    this.pageTitle = String(route.snapshot.data["title"] || "Dashboard");
+    this.pageTitle = String(route.snapshot.data["title"] || "لوحة التحكم");
   }
 }

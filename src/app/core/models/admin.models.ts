@@ -83,6 +83,28 @@ export interface InterviewsResponse extends PaginationMeta {
   interviews: AdminInterview[];
 }
 
+export interface AdminCodeSubmission {
+  _id: string;
+  userId: AdminUser | null;
+  problemId: string;
+  problemTitle: string;
+  difficulty: "easy" | "medium" | "hard";
+  language: string;
+  accepted: boolean;
+  firstTry: boolean;
+  solvedPointsAwarded: number;
+  firstTryBonusAwarded: number;
+  dailyBonusAwarded: number;
+  wrongPenaltyApplied: number;
+  scoreDelta: number;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface SubmissionsResponse extends PaginationMeta {
+  submissions: AdminCodeSubmission[];
+}
+
 export interface SubscriptionDistributionItem {
   plan: SubscriptionPlan;
   count: number;

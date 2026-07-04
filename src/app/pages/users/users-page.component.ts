@@ -3,8 +3,8 @@ import { Component, OnInit, inject } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { finalize } from "rxjs";
 
-import { AdminApiService } from "../../core/services/admin-api.service";
 import { AdminRole, AdminUser } from "../../core/models/admin.models";
+import { AdminApiService } from "../../core/services/admin-api.service";
 
 type UserForm = {
   name: string;
@@ -35,26 +35,20 @@ const emptyForm = (): UserForm => ({
       <section class="admin-panel p-5">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">Management</p>
-            <h2 class="mt-2 text-2xl font-bold text-white">Users</h2>
-            <p class="mt-2 text-sm text-base-content/60">Create local user records, edit profile metadata, update roles, and remove stale accounts.</p>
+            <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">الإدارة</p>
+            <h2 class="mt-2 text-2xl font-bold text-white">المستخدمون</h2>
+            <p class="mt-2 text-sm text-base-content/60">إدارة بيانات المستخدمين وتغيير الصلاحيات بدون قوائم مزدحمة.</p>
           </div>
-          <div class="flex w-full flex-col gap-3 sm:flex-row lg:max-w-xl">
-            <input
-              class="admin-input"
-              type="text"
-              placeholder="Search users by name or email"
-              [(ngModel)]="searchTerm"
-              (keydown.enter)="search()"
-            />
-            <button class="admin-button-secondary" type="button" (click)="search()">Search</button>
-            <button class="admin-button" type="button" (click)="startCreate()">New user</button>
+          <div class="grid w-full gap-3 sm:grid-cols-[1fr_auto_auto] lg:max-w-xl">
+            <input class="admin-input" type="text" placeholder="ابحث بالاسم أو البريد" [(ngModel)]="searchTerm" (keydown.enter)="search()" />
+            <button class="admin-button-secondary" type="button" (click)="search()">بحث</button>
+            <button class="admin-button" type="button" (click)="startCreate()">مستخدم جديد</button>
           </div>
         </div>
       </section>
 
       <section *ngIf="error" class="admin-panel border-red-500/20 bg-red-500/10 p-6 text-red-100">
-        <p class="text-lg font-semibold">Couldn’t complete the user action.</p>
+        <p class="text-lg font-semibold">تعذر تنفيذ العملية.</p>
         <p class="mt-2 text-sm text-red-200/80">{{ error }}</p>
       </section>
 
@@ -74,26 +68,22 @@ const emptyForm = (): UserForm => ({
 
           <section *ngIf="!loading" class="admin-panel overflow-hidden p-0">
             <div *ngIf="users.length; else emptyUsers" class="overflow-x-auto">
-              <table class="admin-table">
+              <table class="admin-table min-w-[860px]">
                 <thead class="bg-white/5">
                   <tr>
-                    <th class="admin-th">Profile</th>
-                    <th class="admin-th">Email</th>
-                    <th class="admin-th">Role</th>
-                    <th class="admin-th">Score</th>
-                    <th class="admin-th">Joined</th>
-                    <th class="admin-th">Actions</th>
+                    <th class="admin-th">الملف</th>
+                    <th class="admin-th">البريد</th>
+                    <th class="admin-th">الصلاحية</th>
+                    <th class="admin-th">النقاط</th>
+                    <th class="admin-th">تاريخ الانضمام</th>
+                    <th class="admin-th">إجراءات</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-white/10 bg-base-100">
                   <tr *ngFor="let user of users">
                     <td class="admin-td">
                       <div class="flex items-center gap-3">
-                        <img
-                          [src]="user.profileImage || defaultAvatar"
-                          [alt]="user.name"
-                          class="h-12 w-12 rounded-2xl border border-base-300 object-cover"
-                        />
+                        <img [src]="user.profileImage || defaultAvatar" [alt]="user.name" class="h-12 w-12 rounded-2xl border border-base-300 object-cover" />
                         <div>
                           <p class="font-semibold text-white">{{ user.name }}</p>
                           <p class="text-xs text-base-content/60">{{ user.clerkId }}</p>
@@ -103,7 +93,7 @@ const emptyForm = (): UserForm => ({
                     <td class="admin-td text-base-content/80">{{ user.email }}</td>
                     <td class="admin-td">
                       <span class="rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.18em]" [ngClass]="roleBadgeClass(user.role)">
-                        {{ user.role }}
+                        {{ user.role === 'admin' ? 'مدير' : 'مستخدم' }}
                       </span>
                     </td>
                     <td class="admin-td text-base-content/80">
@@ -113,8 +103,11 @@ const emptyForm = (): UserForm => ({
                     <td class="admin-td text-base-content/80">{{ formatDate(user.createdAt) }}</td>
                     <td class="admin-td">
                       <div class="flex flex-wrap gap-2">
-                        <button class="admin-button-secondary !px-3 !py-2" type="button" (click)="startEdit(user)">Edit</button>
-                        <button class="rounded-2xl border border-red-400/20 bg-red-500/10 px-3 py-2 text-sm font-semibold text-red-100" type="button" (click)="deleteUser(user)">Delete</button>
+                        <button class="admin-button-secondary !px-3 !py-2" type="button" (click)="startEdit(user)">تعديل</button>
+                        <button class="admin-button-secondary !px-3 !py-2" type="button" (click)="toggleRole(user)">
+                          {{ user.role === 'admin' ? 'جعله مستخدمًا' : 'جعله مديرًا' }}
+                        </button>
+                        <button class="rounded-2xl border border-red-400/20 bg-red-500/10 px-3 py-2 text-sm font-semibold text-red-100" type="button" (click)="deleteUser(user)">حذف</button>
                       </div>
                     </td>
                   </tr>
@@ -124,76 +117,68 @@ const emptyForm = (): UserForm => ({
 
             <ng-template #emptyUsers>
               <div class="p-12 text-center text-base-content/60">
-                <p class="text-lg font-semibold text-white">No users found</p>
-                <p class="mt-2 text-sm">Try a different search term or create a local user record.</p>
+                <p class="text-lg font-semibold text-white">لا يوجد مستخدمون</p>
+                <p class="mt-2 text-sm">جرب بحثًا آخر أو أنشئ سجل مستخدم جديد.</p>
               </div>
             </ng-template>
           </section>
 
           <section class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p class="text-sm text-base-content/60">Page {{ page }} of {{ totalPages }}</p>
+            <p class="text-sm text-base-content/60">صفحة {{ page }} من {{ totalPages }}</p>
             <div class="flex gap-2">
-              <button class="admin-button-secondary" type="button" [disabled]="page <= 1 || loading" (click)="goToPage(page - 1)">Previous</button>
-              <button class="admin-button-secondary" type="button" [disabled]="page >= totalPages || loading" (click)="goToPage(page + 1)">Next</button>
+              <button class="admin-button-secondary" type="button" [disabled]="page <= 1 || loading" (click)="goToPage(page - 1)">السابق</button>
+              <button class="admin-button-secondary" type="button" [disabled]="page >= totalPages || loading" (click)="goToPage(page + 1)">التالي</button>
             </div>
           </section>
         </div>
 
         <form class="admin-panel space-y-5 p-5" (ngSubmit)="saveUser()">
           <div>
-            <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">{{ editingId ? 'Edit user' : 'Create user' }}</p>
-            <h3 class="mt-2 text-xl font-bold text-white">{{ form.name || 'User record' }}</h3>
-            <p class="mt-2 text-xs leading-5 text-base-content/60">This manages the app database user record. Creating a user here does not create a Clerk login.</p>
+            <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">{{ editingId ? 'تعديل مستخدم' : 'إنشاء مستخدم' }}</p>
+            <h3 class="mt-2 text-xl font-bold text-white">{{ form.name || 'سجل مستخدم' }}</h3>
+            <p class="mt-2 text-xs leading-5 text-base-content/60">هذا يعدل سجل قاعدة البيانات فقط ولا ينشئ حساب Clerk جديدًا.</p>
           </div>
 
           <label class="block space-y-2">
-            <span class="text-sm font-semibold text-base-content/75">Name</span>
+            <span class="text-sm font-semibold text-base-content/75">الاسم</span>
             <input class="admin-input" required [(ngModel)]="form.name" name="name" />
           </label>
 
           <label class="block space-y-2">
-            <span class="text-sm font-semibold text-base-content/75">Email</span>
+            <span class="text-sm font-semibold text-base-content/75">البريد الإلكتروني</span>
             <input class="admin-input" required type="email" [(ngModel)]="form.email" name="email" />
           </label>
 
           <label class="block space-y-2">
-            <span class="text-sm font-semibold text-base-content/75">Clerk ID</span>
-            <input class="admin-input" [required]="!!editingId" placeholder="Auto-generated for local users" [(ngModel)]="form.clerkId" name="clerkId" />
+            <span class="text-sm font-semibold text-base-content/75">معرف Clerk</span>
+            <input class="admin-input" [required]="!!editingId" placeholder="يتم إنشاؤه تلقائيًا للمستخدم المحلي" [(ngModel)]="form.clerkId" name="clerkId" />
           </label>
 
           <label class="block space-y-2">
-            <span class="text-sm font-semibold text-base-content/75">Profile image URL</span>
+            <span class="text-sm font-semibold text-base-content/75">رابط الصورة</span>
             <input class="admin-input" [(ngModel)]="form.profileImage" name="profileImage" />
           </label>
 
           <div class="grid gap-4 sm:grid-cols-2">
             <label class="space-y-2">
-              <span class="text-sm font-semibold text-base-content/75">Role</span>
-              <select class="admin-input" [(ngModel)]="form.role" name="role">
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
-              </select>
-            </label>
-            <label class="space-y-2">
-              <span class="text-sm font-semibold text-base-content/75">Level</span>
+              <span class="text-sm font-semibold text-base-content/75">المستوى</span>
               <select class="admin-input" [(ngModel)]="form.level" name="level">
-                <option value="Entry-Level">Entry-Level</option>
+                <option value="Entry-Level">مبتدئ</option>
                 <option value="Junior">Junior</option>
                 <option value="Intermediate">Intermediate</option>
                 <option value="Advanced">Advanced</option>
               </select>
             </label>
+            <label class="space-y-2">
+              <span class="text-sm font-semibold text-base-content/75">النقاط</span>
+              <input class="admin-input" type="number" min="0" [(ngModel)]="form.score" name="score" />
+            </label>
           </div>
 
-          <label class="block space-y-2">
-            <span class="text-sm font-semibold text-base-content/75">Score</span>
-            <input class="admin-input" type="number" min="0" [(ngModel)]="form.score" name="score" />
-          </label>
-
           <div class="flex flex-col gap-3 sm:flex-row sm:justify-end">
-            <button class="admin-button-secondary" type="button" (click)="resetForm()">Reset</button>
+            <button class="admin-button-secondary" type="button" (click)="resetForm()">إعادة ضبط</button>
             <button class="admin-button" type="submit" [disabled]="saving">
-              {{ saving ? 'Saving...' : editingId ? 'Save changes' : 'Create user' }}
+              {{ saving ? 'جارٍ الحفظ...' : editingId ? 'حفظ التغييرات' : 'إنشاء مستخدم' }}
             </button>
           </div>
         </form>
@@ -263,13 +248,23 @@ export class UsersPageComponent implements OnInit {
         this.loadUsers();
       },
       error: (error) => {
-        this.error = error?.error?.msg || "Could not save user.";
+        this.error = error?.error?.msg || "تعذر حفظ المستخدم.";
+      },
+    });
+  }
+
+  toggleRole(user: AdminUser): void {
+    const nextRole: AdminRole = user.role === "admin" ? "user" : "admin";
+    this.api.updateUserRole(user._id, nextRole).subscribe({
+      next: () => this.loadUsers(),
+      error: (error) => {
+        this.error = error?.error?.msg || "تعذر تغيير الصلاحية.";
       },
     });
   }
 
   deleteUser(user: AdminUser): void {
-    if (!window.confirm(`Delete "${user.name}"? This removes the local app user record.`)) return;
+    if (!window.confirm(`حذف "${user.name}"؟ سيتم حذف سجل المستخدم المحلي.`)) return;
 
     this.api.deleteUser(user._id).subscribe({
       next: () => {
@@ -277,7 +272,7 @@ export class UsersPageComponent implements OnInit {
         this.loadUsers();
       },
       error: (error) => {
-        this.error = error?.error?.msg || "Could not delete user.";
+        this.error = error?.error?.msg || "تعذر حذف المستخدم.";
       },
     });
   }
@@ -296,7 +291,7 @@ export class UsersPageComponent implements OnInit {
           this.totalPages = response.totalPages;
         },
         error: (error) => {
-          this.error = error?.error?.msg || "The users table could not be loaded.";
+          this.error = error?.error?.msg || "تعذر تحميل جدول المستخدمين.";
         },
       });
   }
@@ -313,7 +308,7 @@ export class UsersPageComponent implements OnInit {
   }
 
   formatDate(value: string): string {
-    return new Intl.DateTimeFormat("en", {
+    return new Intl.DateTimeFormat("ar", {
       year: "numeric",
       month: "short",
       day: "numeric",

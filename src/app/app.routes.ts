@@ -9,12 +9,13 @@ import { AiInterviewsPageComponent } from "./pages/ai-interviews/ai-interviews-p
 import { LoginPageComponent } from "./pages/login/login-page.component";
 import { BlogPostsPageComponent } from "./pages/blog-posts/blog-posts-page.component";
 import { ProblemsPageComponent } from "./pages/problems/problems-page.component";
+import { SubmissionsPageComponent } from "./pages/submissions/submissions-page.component";
 
 export const routes: Routes = [
   {
     path: "login",
     component: LoginPageComponent,
-    data: { title: "Admin Login" },
+    data: { title: "تسجيل دخول الإدارة" },
   },
   {
     path: "",
@@ -22,12 +23,13 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       { path: "", pathMatch: "full", redirectTo: "dashboard" },
-      { path: "dashboard", component: DashboardPageComponent, data: { title: "Dashboard" } },
-      { path: "users", component: UsersPageComponent, data: { title: "Users" } },
-      { path: "sessions", component: SessionsPageComponent, data: { title: "Sessions" } },
-      { path: "ai-interviews", component: AiInterviewsPageComponent, data: { title: "AI Interviews" } },
-      { path: "problems", component: ProblemsPageComponent, data: { title: "Problems" } },
-      { path: "blog-posts", component: BlogPostsPageComponent, data: { title: "Blog Posts" } },
+      { path: "dashboard", component: DashboardPageComponent, data: { title: "لوحة التحكم" } },
+      { path: "users", component: UsersPageComponent, data: { title: "المستخدمون" } },
+      { path: "sessions", component: SessionsPageComponent, data: { title: "الجلسات" } },
+      { path: "ai-interviews", component: AiInterviewsPageComponent, data: { title: "مقابلات الذكاء" } },
+      { path: "problems", component: ProblemsPageComponent, data: { title: "المسائل" } },
+      { path: "submissions", component: SubmissionsPageComponent, data: { title: "التسليمات" } },
+      { path: "blog-posts", component: BlogPostsPageComponent, data: { title: "المدونة" } },
       { path: "**", redirectTo: "dashboard" },
     ],
   },
