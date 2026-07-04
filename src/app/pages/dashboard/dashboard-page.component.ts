@@ -61,14 +61,14 @@ interface StatCard {
         *ngIf="error"
         class="admin-panel border-red-500/20 bg-red-500/10 p-6 text-red-100"
       >
-        <p class="text-lg font-semibold">تعذر تحميل لوحة التحكم.</p>
+        <p class="text-lg font-semibold">Could not load the dashboard.</p>
         <p class="mt-2 text-sm text-red-200/80">{{ error }}</p>
         <button
           class="admin-button mt-4"
           type="button"
           (click)="loadDashboard()"
         >
-          إعادة المحاولة
+          Retry
         </button>
       </section>
 
@@ -105,13 +105,13 @@ interface StatCard {
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">
-                  الاتجاه
+                  Trend
                 </p>
                 <h2 class="mt-2 text-xl font-bold text-white">
-                  الجلسات عبر الوقت
+                  Sessions over time
                 </h2>
               </div>
-              <span class="admin-chip">آخر 30 يوم</span>
+              <span class="admin-chip">Last 30 days</span>
             </div>
             <div class="mt-5 h-[320px]">
               <canvas
@@ -127,13 +127,13 @@ interface StatCard {
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">
-                  الاتجاه
+                  Trend
                 </p>
                 <h2 class="mt-2 text-xl font-bold text-white">
-                  مقابلات الذكاء يوميًا
+                  AI interviews per day
                 </h2>
               </div>
-              <span class="admin-chip">آخر 30 يوم</span>
+              <span class="admin-chip">Last 30 days</span>
             </div>
             <div class="mt-5 h-[320px]">
               <canvas
@@ -151,13 +151,13 @@ interface StatCard {
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">
-                  الترتيب
+                  Leaderboard
                 </p>
                 <h2 class="mt-2 text-xl font-bold text-white">
-                  أفضل 10 مرشحين
+                  Top 10 candidates
                 </h2>
               </div>
-              <span class="admin-chip">حسب متوسط التقييم</span>
+              <span class="admin-chip">By overall average score</span>
             </div>
 
             <div
@@ -167,11 +167,11 @@ interface StatCard {
               <table class="admin-table min-w-[760px]">
                 <thead class="bg-white/5">
                   <tr>
-                    <th class="admin-th">الترتيب</th>
-                    <th class="admin-th">المرشح</th>
-                    <th class="admin-th">المجال</th>
-                    <th class="admin-th">المقابلات</th>
-                    <th class="admin-th">التقييم</th>
+                    <th class="admin-th">Rank</th>
+                    <th class="admin-th">Candidate</th>
+                    <th class="admin-th">Field</th>
+                    <th class="admin-th">Interviews</th>
+                    <th class="admin-th">Score</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-white/10 bg-base-100">
@@ -190,10 +190,10 @@ interface StatCard {
                         />
                         <div>
                           <p class="font-semibold text-white">
-                            {{ candidate.userId?.name || "مرشح غير معروف" }}
+                            {{ candidate.userId?.name || "Unknown candidate" }}
                           </p>
                           <p class="text-xs text-base-content/60">
-                            {{ candidate.userId?.email || "لا يوجد بريد" }}
+                            {{ candidate.userId?.email || "No email" }}
                           </p>
                         </div>
                       </div>
@@ -225,7 +225,7 @@ interface StatCard {
               <div
                 class="mt-5 rounded-3xl border border-dashed border-base-300 bg-white/5 p-10 text-center text-base-content/60"
               >
-                لا توجد ملفات مرشحين بعد.
+                No candidate profiles are available yet.
               </div>
             </ng-template>
           </section>
@@ -233,10 +233,10 @@ interface StatCard {
           <section class="admin-panel p-5">
             <div>
               <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">
-                الاشتراكات
+                Subscriptions
               </p>
               <h2 class="mt-2 text-xl font-bold text-white">
-                توزيع الخطط
+                Plan distribution
               </h2>
             </div>
 
@@ -252,7 +252,7 @@ interface StatCard {
                     <p class="text-sm font-semibold capitalize text-white">
                       {{ plan.plan }}
                     </p>
-                    <p class="text-xs text-base-content/60">{{ plan.count }} مستخدم</p>
+                    <p class="text-xs text-base-content/60">{{ plan.count }} users</p>
                   </div>
                   <span class="text-sm font-semibold text-emerald-300"
                     >{{ plan.percentage }}%</span
@@ -291,7 +291,7 @@ interface StatCard {
             <div
               class="mt-5 rounded-[1.75rem] border border-base-300 bg-white/5 p-4"
             >
-              <p class="text-sm font-semibold text-white">تصنيفات المسائل</p>
+              <p class="text-sm font-semibold text-white">Problem categories</p>
               <div
                 *ngIf="problemStats.length; else noProblems"
                 class="mt-4 space-y-3"
@@ -303,14 +303,14 @@ interface StatCard {
                   <div>
                     <p class="font-medium text-white">{{ item.category }}</p>
                     <p class="text-xs text-base-content/60">
-                      {{ item.attempts }} محاولة
+                      {{ item.attempts }} attempts
                     </p>
                   </div>
                   <span
                     class="rounded-full px-3 py-1 text-xs font-bold"
                     [ngClass]="scoreBadgeClass(item.averageScore)"
                   >
-                    متوسط {{ formatScore(item.averageScore) }}
+                    Avg {{ formatScore(item.averageScore) }}
                   </span>
                 </div>
               </div>
@@ -318,7 +318,7 @@ interface StatCard {
                 <div
                   class="mt-4 rounded-2xl border border-dashed border-base-300 bg-[#08101c] p-4 text-sm text-base-content/60"
                 >
-                  لا توجد إحصائيات مسائل بعد.
+                  No problem statistics yet.
                 </div>
               </ng-template>
             </div>
@@ -494,50 +494,50 @@ export class DashboardPageComponent implements OnInit {
 
     this.statCards = [
       {
-        label: "كل المستخدمين",
+        label: "Total Users",
         value: stats.totalUsers,
         icon: "◫",
-        hint: "الحسابات المسجلة في المنصة",
+        hint: "Registered accounts in the platform",
         gradient:
           "bg-gradient-to-br from-cyan-500/20 via-slate-900 to-slate-950",
       },
       {
-        label: "كل الجلسات",
+        label: "Total Sessions",
         value: stats.totalSessions,
         icon: "◎",
-        hint: "جلسات البرمجة التي تم إنشاؤها",
+        hint: "Coding sessions created so far",
         gradient:
           "bg-gradient-to-br from-violet-500/20 via-slate-900 to-slate-950",
       },
       {
-        label: "مقابلات الذكاء",
+        label: "AI Interviews",
         value: stats.totalInterviews,
         icon: "✦",
-        hint: "المقابلات المخزنة في النظام",
+        hint: "Interview runs stored in the system",
         gradient:
           "bg-gradient-to-br from-amber-500/20 via-slate-900 to-slate-950",
       },
       {
-        label: "متوسط الذكاء",
+        label: "Avg AI Score",
         value: Math.round(stats.averageAiScore),
         icon: "◔",
-        hint: "متوسط نتائج المقابلات المكتملة",
+        hint: "Average score across completed interviews",
         gradient:
           "bg-gradient-to-br from-emerald-500/20 via-slate-900 to-slate-950",
       },
       {
-        label: "الاشتراكات النشطة",
+        label: "Active Subscriptions",
         value: stats.activeSubscriptions,
         icon: "⎔",
-        hint: "الخطط المدفوعة النشطة حاليًا",
+        hint: "Paid plans currently active",
         gradient:
           "bg-gradient-to-br from-sky-500/20 via-slate-900 to-slate-950",
       },
       {
-        label: "الدعوات المعلقة",
+        label: "Pending Invitations",
         value: stats.pendingInvitations,
         icon: "⌁",
-        hint: "بانتظار الرد",
+        hint: "Waiting for response",
         gradient:
           "bg-gradient-to-br from-rose-500/20 via-slate-900 to-slate-950",
       },

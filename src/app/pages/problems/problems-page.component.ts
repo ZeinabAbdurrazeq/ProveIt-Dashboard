@@ -51,20 +51,20 @@ const emptyForm = (): ProblemForm => ({
       <section class="admin-panel p-5">
         <div class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
           <div>
-            <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">بنك المسائل</p>
-            <h2 class="mt-2 text-2xl font-bold text-white">المسائل</h2>
-            <p class="mt-2 max-w-2xl text-sm text-base-content/60">إنشاء وتحديث وأرشفة وحذف مسائل البرمجة الخاصة بالمنصة.</p>
+            <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">Problem bank</p>
+            <h2 class="mt-2 text-2xl font-bold text-white">Problems</h2>
+            <p class="mt-2 max-w-2xl text-sm text-base-content/60">Create, update, archive, and delete platform coding problems.</p>
           </div>
           <div class="grid w-full gap-3 sm:grid-cols-2 xl:max-w-3xl xl:grid-cols-[1fr_160px_auto_auto]">
-            <input class="admin-input" type="text" placeholder="ابحث بالعنوان أو المعرف أو التصنيف" [(ngModel)]="searchTerm" (keydown.enter)="search()" />
+            <input class="admin-input" type="text" placeholder="Search title, id, or category" [(ngModel)]="searchTerm" (keydown.enter)="search()" />
             <select class="admin-input sm:max-w-44" [(ngModel)]="difficultyFilter" (change)="search()">
-              <option value="">كل المستويات</option>
-              <option value="Easy">سهل</option>
-              <option value="Medium">متوسط</option>
-              <option value="Hard">صعب</option>
+              <option value="">All levels</option>
+              <option value="Easy">Easy</option>
+              <option value="Medium">Medium</option>
+              <option value="Hard">Hard</option>
             </select>
-            <button class="admin-button-secondary" type="button" (click)="search()">بحث</button>
-            <button class="admin-button" type="button" (click)="startCreate()">مسألة جديدة</button>
+            <button class="admin-button-secondary" type="button" (click)="search()">Search</button>
+            <button class="admin-button" type="button" (click)="startCreate()">New problem</button>
           </div>
         </div>
       </section>
@@ -76,11 +76,11 @@ const emptyForm = (): ProblemForm => ({
       <section class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(360px,560px)]">
         <div class="space-y-6">
           <div class="admin-panel overflow-hidden p-0">
-            <div *ngIf="loading" class="p-8 text-base-content/70">جارٍ تحميل المسائل...</div>
+            <div *ngIf="loading" class="p-8 text-base-content/70">Loading problems...</div>
 
             <div *ngIf="!loading && problems.length === 0" class="p-10 text-center text-base-content/60">
-              <p class="text-lg font-semibold text-white">لا توجد مسائل</p>
-              <p class="mt-2 text-sm">أنشئ أول مسألة من المحرر.</p>
+              <p class="text-lg font-semibold text-white">No problems found</p>
+              <p class="mt-2 text-sm">Create the first problem from the editor.</p>
             </div>
 
             <div *ngIf="!loading && problems.length" class="divide-y divide-white/10">
@@ -88,24 +88,24 @@ const emptyForm = (): ProblemForm => ({
                 <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div class="min-w-0">
                     <div class="flex flex-wrap items-center gap-2">
-                      <span class="admin-chip">{{ problem.category || 'عام' }}</span>
+                      <span class="admin-chip">{{ problem.category || 'General' }}</span>
                       <span class="rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.16em]" [ngClass]="difficultyBadgeClass(problem.difficulty)">
                         {{ difficultyLabel(problem.difficulty) }}
                       </span>
                       <span class="rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.16em]" [ngClass]="problem.active ? 'border-emerald-400/20 bg-emerald-400/10 text-emerald-300' : 'border-slate-400/20 bg-slate-400/10 text-slate-300'">
-                        {{ problem.active ? 'نشطة' : 'مؤرشفة' }}
+                        {{ problem.active ? 'Active' : 'Archived' }}
                       </span>
                     </div>
                     <h3 class="mt-3 break-words text-xl font-bold text-white">{{ problem.title }}</h3>
-                    <p class="mt-2 break-words text-sm text-base-content/65">{{ problem.description.text || 'لا يوجد وصف بعد.' }}</p>
+                    <p class="mt-2 break-words text-sm text-base-content/65">{{ problem.description.text || 'No description yet.' }}</p>
                     <p class="mt-2 font-mono text-xs text-base-content/45">/{{ problem.id }}</p>
                   </div>
                   <div class="flex shrink-0 flex-wrap gap-2">
-                    <button class="admin-button-secondary" type="button" (click)="startEdit(problem)">تعديل</button>
+                    <button class="admin-button-secondary" type="button" (click)="startEdit(problem)">Edit</button>
                     <button class="admin-button-secondary" type="button" (click)="toggleActive(problem)">
-                      {{ problem.active ? 'أرشفة' : 'تفعيل' }}
+                      {{ problem.active ? 'Archive' : 'Activate' }}
                     </button>
-                    <button class="rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-100" type="button" (click)="deleteProblem(problem)">حذف</button>
+                    <button class="rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-100" type="button" (click)="deleteProblem(problem)">Delete</button>
                   </div>
                 </div>
               </article>
@@ -113,75 +113,75 @@ const emptyForm = (): ProblemForm => ({
           </div>
 
           <section class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p class="text-sm text-base-content/60">صفحة {{ page }} من {{ totalPages }}</p>
+            <p class="text-sm text-base-content/60">Page {{ page }} of {{ totalPages }}</p>
             <div class="flex gap-2">
-              <button class="admin-button-secondary" type="button" [disabled]="page <= 1 || loading" (click)="goToPage(page - 1)">السابق</button>
-              <button class="admin-button-secondary" type="button" [disabled]="page >= totalPages || loading" (click)="goToPage(page + 1)">التالي</button>
+              <button class="admin-button-secondary" type="button" [disabled]="page <= 1 || loading" (click)="goToPage(page - 1)">Previous</button>
+              <button class="admin-button-secondary" type="button" [disabled]="page >= totalPages || loading" (click)="goToPage(page + 1)">Next</button>
             </div>
           </section>
         </div>
 
         <form class="admin-panel problem-editor-panel space-y-5 p-5" (ngSubmit)="saveProblem()">
           <div>
-            <p class="text-sm uppercase tracking-[0.24em] text-base-content/70">{{ editingId ? 'تعديل مسألة' : 'إنشاء مسألة' }}</p>
-            <h3 class="mt-2 text-xl font-bold text-white">{{ form.title || 'مسألة بدون عنوان' }}</h3>
+            <p class="text-sm uppercase tracking-[0.24em] text-base-content/70">{{ editingId ? 'Edit problem' : 'Create problem' }}</p>
+            <h3 class="mt-2 text-xl font-bold text-white">{{ form.title || 'Untitled problem' }}</h3>
           </div>
 
           <div class="grid gap-4 sm:grid-cols-2">
             <label class="space-y-2">
-              <span class="problem-field-label">العنوان</span>
+              <span class="problem-field-label">Title</span>
               <input class="admin-input" required [(ngModel)]="form.title" name="title" (ngModelChange)="syncId()" />
             </label>
             <label class="space-y-2">
-              <span class="problem-field-label">معرف المسألة</span>
+              <span class="problem-field-label">Problem ID</span>
               <input class="admin-input font-mono" required [(ngModel)]="form.id" name="problemId" (ngModelChange)="idTouched = true" />
             </label>
           </div>
 
           <div class="grid gap-4 sm:grid-cols-2">
             <label class="space-y-2">
-              <span class="problem-field-label">المستوى</span>
+              <span class="problem-field-label">Difficulty</span>
               <select class="admin-input" [(ngModel)]="form.difficulty" name="difficulty">
-                <option value="Easy">سهل</option>
-                <option value="Medium">متوسط</option>
-                <option value="Hard">صعب</option>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
               </select>
             </label>
             <label class="space-y-2">
-              <span class="problem-field-label">التصنيف</span>
+              <span class="problem-field-label">Category</span>
               <input class="admin-input" [(ngModel)]="form.category" name="category" />
             </label>
           </div>
 
           <label class="block space-y-2">
-            <span class="problem-field-label">الوصف</span>
+            <span class="problem-field-label">Description</span>
             <textarea class="admin-input min-h-28" required [(ngModel)]="form.descriptionText" name="descriptionText"></textarea>
           </label>
 
           <label class="block space-y-2">
-            <span class="problem-field-label">الملاحظات</span>
-            <textarea class="admin-input min-h-20" placeholder="ملاحظة واحدة في كل سطر" [(ngModel)]="form.notesText" name="notesText"></textarea>
+            <span class="problem-field-label">Notes</span>
+            <textarea class="admin-input min-h-20" placeholder="One note per line" [(ngModel)]="form.notesText" name="notesText"></textarea>
           </label>
 
           <label class="block space-y-2">
-            <span class="problem-field-label">الأمثلة</span>
+            <span class="problem-field-label">Examples</span>
             <textarea class="admin-input min-h-24" placeholder="input | output | explanation" [(ngModel)]="form.examplesText" name="examplesText"></textarea>
           </label>
 
           <label class="block space-y-2">
-            <span class="problem-field-label">القيود</span>
-            <textarea class="admin-input min-h-20" placeholder="قيد واحد في كل سطر" [(ngModel)]="form.constraintsText" name="constraintsText"></textarea>
+            <span class="problem-field-label">Constraints</span>
+            <textarea class="admin-input min-h-20" placeholder="One constraint per line" [(ngModel)]="form.constraintsText" name="constraintsText"></textarea>
           </label>
 
           <div class="space-y-3">
-            <h4 class="font-bold text-white">كود البداية</h4>
+            <h4 class="font-bold text-white">Starter code</h4>
             <textarea class="admin-input min-h-32 font-mono text-xs" placeholder="JavaScript starter" [(ngModel)]="form.javascriptStarter" name="javascriptStarter"></textarea>
             <textarea class="admin-input min-h-32 font-mono text-xs" placeholder="Python starter" [(ngModel)]="form.pythonStarter" name="pythonStarter"></textarea>
             <textarea class="admin-input min-h-32 font-mono text-xs" placeholder="Java starter" [(ngModel)]="form.javaStarter" name="javaStarter"></textarea>
           </div>
 
           <div class="space-y-3">
-            <h4 class="font-bold text-white">الناتج المتوقع</h4>
+            <h4 class="font-bold text-white">Expected output</h4>
             <textarea class="admin-input min-h-20 font-mono text-xs" placeholder="JavaScript expected output" [(ngModel)]="form.javascriptExpected" name="javascriptExpected"></textarea>
             <textarea class="admin-input min-h-20 font-mono text-xs" placeholder="Python expected output" [(ngModel)]="form.pythonExpected" name="pythonExpected"></textarea>
             <textarea class="admin-input min-h-20 font-mono text-xs" placeholder="Java expected output" [(ngModel)]="form.javaExpected" name="javaExpected"></textarea>
@@ -189,13 +189,13 @@ const emptyForm = (): ProblemForm => ({
 
           <label class="flex items-center gap-3">
             <input type="checkbox" class="toggle toggle-success" [(ngModel)]="form.active" name="active" />
-            <span class="font-semibold text-base-content/80">نشطة</span>
+            <span class="font-semibold text-base-content/80">Active</span>
           </label>
 
           <div class="flex flex-col gap-3 sm:flex-row sm:justify-end">
-            <button class="admin-button-secondary" type="button" (click)="resetForm()">إعادة ضبط</button>
+            <button class="admin-button-secondary" type="button" (click)="resetForm()">Reset</button>
             <button class="admin-button" type="submit" [disabled]="saving">
-              {{ saving ? 'جارٍ الحفظ...' : 'حفظ المسألة' }}
+              {{ saving ? 'Saving...' : 'Save problem' }}
             </button>
           </div>
         </form>
@@ -299,7 +299,7 @@ export class ProblemsPageComponent implements OnInit {
         this.loadProblems();
       },
       error: (error) => {
-        this.error = error?.error?.msg || "تعذر حفظ المسألة.";
+        this.error = error?.error?.msg || "Could not save problem.";
       },
     });
   }
@@ -308,13 +308,13 @@ export class ProblemsPageComponent implements OnInit {
     this.api.updateProblem(problem._id, { ...problem, active: !problem.active }).subscribe({
       next: () => this.loadProblems(),
       error: (error) => {
-        this.error = error?.error?.msg || "تعذر تحديث المسألة.";
+        this.error = error?.error?.msg || "Could not update problem.";
       },
     });
   }
 
   deleteProblem(problem: AdminProblem): void {
-    if (!window.confirm(`حذف "${problem.title}"؟`)) return;
+    if (!window.confirm(`Delete "${problem.title}"?`)) return;
 
     this.api.deleteProblem(problem._id).subscribe({
       next: () => {
@@ -322,7 +322,7 @@ export class ProblemsPageComponent implements OnInit {
         this.loadProblems();
       },
       error: (error) => {
-        this.error = error?.error?.msg || "تعذر حذف المسألة.";
+        this.error = error?.error?.msg || "Could not delete problem.";
       },
     });
   }
@@ -346,7 +346,7 @@ export class ProblemsPageComponent implements OnInit {
           this.totalPages = response.totalPages;
         },
         error: (error) => {
-          this.error = error?.error?.msg || "تعذر تحميل قائمة المسائل.";
+          this.error = error?.error?.msg || "The problems list could not be loaded.";
         },
       });
   }
@@ -369,9 +369,9 @@ export class ProblemsPageComponent implements OnInit {
   }
 
   difficultyLabel(difficulty: string): string {
-    if (difficulty === "Hard") return "صعب";
-    if (difficulty === "Medium") return "متوسط";
-    return "سهل";
+    if (difficulty === "Hard") return "Hard";
+    if (difficulty === "Medium") return "Medium";
+    return "Easy";
   }
 
   private toPayload(): Partial<AdminProblem> {

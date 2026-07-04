@@ -9,20 +9,16 @@ import { ClerkAuthService } from "../core/services/clerk.service";
 import { environment } from "../../environments/environment";
 
 interface NavItem {
-  labelAr: string;
-  labelEn: string;
+  label: string;
   path: string;
   icon: string;
 }
 
-type AdminLanguage = "ar" | "en";
 type AdminDensity = "comfortable" | "compact";
 
 const MAIN_THEME_STORAGE_KEY = "provelt-theme";
-const ADMIN_LANGUAGE_STORAGE_KEY = "provelt-admin-language";
 const ADMIN_DENSITY_STORAGE_KEY = "provelt-admin-density";
 const DEFAULT_THEME = "proveit";
-const DEFAULT_LANGUAGE: AdminLanguage = "en";
 
 @Component({
   selector: "app-admin-layout",
@@ -66,7 +62,7 @@ const DEFAULT_LANGUAGE: AdminLanguage = "en";
               (click)="closeMobileMenu()"
             >
               <span class="admin-nav-icon grid h-9 w-9 place-items-center rounded-xl text-lg transition">{{ item.icon }}</span>
-              <span class="whitespace-nowrap">{{ currentLanguage === 'ar' ? item.labelAr : item.labelEn }}</span>
+              <span class="whitespace-nowrap">{{ item.label }}</span>
             </a>
           </nav>
 
@@ -110,11 +106,6 @@ const DEFAULT_LANGUAGE: AdminLanguage = "en";
                   </select>
                 </label>
 
-                <div class="admin-segmented" role="group" [attr.aria-label]="text.language">
-                  <button type="button" [class.active]="currentLanguage === 'ar'" (click)="setLanguage('ar')">عربي</button>
-                  <button type="button" [class.active]="currentLanguage === 'en'" (click)="setLanguage('en')">EN</button>
-                </div>
-
                 <div class="admin-segmented" role="group" [attr.aria-label]="text.dataView">
                   <button type="button" [class.active]="currentDensity === 'comfortable'" (click)="setDensity('comfortable')">{{ text.comfortable }}</button>
                   <button type="button" [class.active]="currentDensity === 'compact'" (click)="setDensity('compact')">{{ text.compact }}</button>
@@ -144,7 +135,6 @@ export class AdminLayoutComponent implements OnInit {
   pageTitle = "Overview";
   adminEmail = environment.adminEmail;
   mainAppUrl = environment.mainAppUrl;
-  currentLanguage: AdminLanguage = DEFAULT_LANGUAGE;
   currentTheme = DEFAULT_THEME;
   currentDensity: AdminDensity = "comfortable";
   themes = [
@@ -181,54 +171,31 @@ export class AdminLayoutComponent implements OnInit {
   ];
 
   navItems: NavItem[] = [
-    { labelAr: "الرئيسية", labelEn: "Overview", path: "/dashboard", icon: "▣" },
-    { labelAr: "المستخدمون", labelEn: "Users", path: "/users", icon: "◫" },
-    { labelAr: "الجلسات", labelEn: "Sessions", path: "/sessions", icon: "◎" },
-    { labelAr: "مقابلات الذكاء", labelEn: "AI interviews", path: "/ai-interviews", icon: "✦" },
-    { labelAr: "المسائل", labelEn: "Problems", path: "/problems", icon: "⌘" },
-    { labelAr: "التسليمات", labelEn: "Submissions", path: "/submissions", icon: "✓" },
-    { labelAr: "المدونة", labelEn: "Blog", path: "/blog-posts", icon: "✎" },
+    { label: "Overview", path: "/dashboard", icon: "▣" },
+    { label: "Users", path: "/users", icon: "◫" },
+    { label: "Sessions", path: "/sessions", icon: "◎" },
+    { label: "AI interviews", path: "/ai-interviews", icon: "✦" },
+    { label: "Problems", path: "/problems", icon: "⌘" },
+    { label: "Submissions", path: "/submissions", icon: "✓" },
+    { label: "Blog", path: "/blog-posts", icon: "✎" },
   ];
 
-  readonly translations = {
-    ar: {
-      portal: "لوحة الإدارة",
-      adminAccess: "صلاحيات الإدارة",
-      sharedSession: "الجلسة مشتركة مع Clerk في الموقع الرئيسي.",
-      backToSite: "العودة للموقع",
-      logout: "تسجيل الخروج",
-      openMenu: "فتح القائمة",
-      search: "بحث سريع...",
-      theme: "السمة",
-      language: "اللغة",
-      dataView: "عرض البيانات",
-      comfortable: "واسع",
-      compact: "مكثف",
-      admin: "مدير",
-    },
-    en: {
-      portal: "Admin portal",
-      adminAccess: "Admin access",
-      sharedSession: "Session is shared with Clerk on the main website.",
-      backToSite: "Back to website",
-      logout: "Sign out",
-      openMenu: "Open menu",
-      search: "Quick search...",
-      theme: "Theme",
-      language: "Language",
-      dataView: "Data view",
-      comfortable: "Comfort",
-      compact: "Compact",
-      admin: "Admin",
-    },
+  readonly text = {
+    portal: "Admin portal",
+    adminAccess: "Admin access",
+    sharedSession: "Session is shared with Clerk on the main website.",
+    backToSite: "Back to website",
+    logout: "Sign out",
+    openMenu: "Open menu",
+    search: "Quick search...",
+    theme: "Theme",
+    dataView: "Data view",
+    comfortable: "Comfort",
+    compact: "Compact",
+    admin: "Admin",
   } as const;
 
-  get text() {
-    return this.translations[this.currentLanguage];
-  }
-
   ngOnInit(): void {
-    this.currentLanguage = this.readPreference<AdminLanguage>(ADMIN_LANGUAGE_STORAGE_KEY, DEFAULT_LANGUAGE, ["ar", "en"]);
     this.currentTheme = this.readThemePreference();
     this.currentDensity = this.readPreference<AdminDensity>(ADMIN_DENSITY_STORAGE_KEY, "comfortable", ["comfortable", "compact"]);
     this.applyPreferences();
@@ -247,13 +214,6 @@ export class AdminLayoutComponent implements OnInit {
 
   closeMobileMenu(): void {
     this.mobileMenuOpen = false;
-  }
-
-  setLanguage(language: AdminLanguage): void {
-    this.currentLanguage = language;
-    localStorage.setItem(ADMIN_LANGUAGE_STORAGE_KEY, language);
-    this.applyPreferences();
-    this.updateTitle();
   }
 
   setTheme(theme: string): void {
@@ -283,18 +243,14 @@ export class AdminLayoutComponent implements OnInit {
     }
 
     const data = route.snapshot.data;
-    this.pageTitle = String(
-      this.currentLanguage === "ar"
-        ? data["titleAr"] || data["title"] || "لوحة التحكم"
-        : data["titleEn"] || data["title"] || "Dashboard",
-    );
+    this.pageTitle = String(data["titleEn"] || data["title"] || "Dashboard");
   }
 
   private applyPreferences(): void {
     const root = document.documentElement;
     const body = document.body;
-    root.lang = this.currentLanguage;
-    root.dir = this.currentLanguage === "ar" ? "rtl" : "ltr";
+    root.lang = "en";
+    root.dir = "ltr";
     body.dataset["theme"] = this.currentTheme;
     root.setAttribute("data-theme", this.currentTheme);
     body.classList.toggle("admin-density-compact", this.currentDensity === "compact");
