@@ -1,4 +1,4 @@
-﻿import { CommonModule } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { Component, OnInit, inject } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { finalize } from "rxjs";
@@ -16,29 +16,22 @@ import { AdminSession } from "../../core/models/admin.models";
         <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">Management</p>
-            <h2 class="mt-2 text-2xl font-bold text-white">Sessions</h2>
+            <h2 class="mt-2 text-2xl font-bold text-base-content">Sessions</h2>
             <p class="mt-2 text-sm text-base-content/60">Filter sessions and inspect host and participant details.</p>
           </div>
-          <label class="flex w-full flex-col gap-2 sm:max-w-xs">
-            <span class="text-sm text-base-content/60">Status filter</span>
-            <select class="admin-input" [(ngModel)]="statusFilter" (change)="applyFilter()">
-              <option value="all">All</option>
-              <option value="active">Active</option>
-              <option value="completed">Completed</option>
-            </select>
-          </label>
+
         </div>
       </section>
 
       <section *ngIf="loading" class="admin-panel p-5">
         <div class="space-y-3">
-          <div *ngFor="let _ of skeletonRows" class="grid grid-cols-6 gap-4 rounded-3xl border border-base-300 bg-white/5 p-4">
-            <div class="h-4 animate-pulse rounded-full bg-white/10"></div>
-            <div class="h-4 animate-pulse rounded-full bg-white/10"></div>
-            <div class="h-4 animate-pulse rounded-full bg-white/10"></div>
-            <div class="h-4 animate-pulse rounded-full bg-white/10"></div>
-            <div class="h-4 animate-pulse rounded-full bg-white/10"></div>
-            <div class="h-4 animate-pulse rounded-full bg-white/10"></div>
+          <div *ngFor="let _ of skeletonRows" class="grid grid-cols-6 gap-4 rounded-3xl border border-base-300 bg-base-200 p-4">
+            <div class="h-4 animate-pulse rounded-full bg-base-300"></div>
+            <div class="h-4 animate-pulse rounded-full bg-base-300"></div>
+            <div class="h-4 animate-pulse rounded-full bg-base-300"></div>
+            <div class="h-4 animate-pulse rounded-full bg-base-300"></div>
+            <div class="h-4 animate-pulse rounded-full bg-base-300"></div>
+            <div class="h-4 animate-pulse rounded-full bg-base-300"></div>
           </div>
         </div>
       </section>
@@ -52,7 +45,7 @@ import { AdminSession } from "../../core/models/admin.models";
       <section *ngIf="!loading && !error" class="admin-panel overflow-hidden p-0">
         <div *ngIf="sessions.length; else emptySessions" class="overflow-x-auto">
           <table class="admin-table min-w-[760px]">
-            <thead class="bg-white/5">
+            <thead class="bg-base-200">
               <tr>
                 <th class="admin-th">Host</th>
                 <th class="admin-th">Participant</th>
@@ -62,13 +55,13 @@ import { AdminSession } from "../../core/models/admin.models";
                 <th class="admin-th">Date</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-white/10 bg-base-100">
+            <tbody class="divide-y divide-base-300 bg-base-100">
               <tr *ngFor="let session of sessions">
                 <td class="admin-td">
                   <div class="flex items-center gap-3">
                     <img [src]="session.host?.profileImage || defaultAvatar" [alt]="session.host?.name || 'Host'" class="h-10 w-10 rounded-2xl border border-base-300 object-cover" />
                     <div>
-                      <p class="font-semibold text-white">{{ session.host?.name || 'Unknown host' }}</p>
+                      <p class="font-semibold text-base-content">{{ session.host?.name || 'Unknown host' }}</p>
                       <p class="text-xs text-base-content/60">{{ session.host?.email || '-' }}</p>
                     </div>
                   </div>
@@ -77,7 +70,7 @@ import { AdminSession } from "../../core/models/admin.models";
                   <div class="flex items-center gap-3">
                     <img [src]="session.participant?.profileImage || defaultAvatar" [alt]="session.participant?.name || 'Participant'" class="h-10 w-10 rounded-2xl border border-base-300 object-cover" />
                     <div>
-                      <p class="font-semibold text-white">{{ session.participant?.name || 'Pending participant' }}</p>
+                      <p class="font-semibold text-base-content">{{ session.participant?.name || 'Pending participant' }}</p>
                       <p class="text-xs text-base-content/60">{{ session.participant?.email || 'Waiting for join' }}</p>
                     </div>
                   </div>
@@ -101,7 +94,7 @@ import { AdminSession } from "../../core/models/admin.models";
 
         <ng-template #emptySessions>
           <div class="p-12 text-center text-base-content/60">
-            <p class="text-lg font-semibold text-white">No sessions found</p>
+            <p class="text-lg font-semibold text-base-content">No sessions found</p>
             <p class="mt-2 text-sm">There are no sessions for the selected filter.</p>
           </div>
         </ng-template>
@@ -156,7 +149,6 @@ export class SessionsPageComponent implements OnInit {
       .getSessions({
         page: this.page,
         limit: this.pageSize,
-        status: this.statusFilter === "all" ? "" : this.statusFilter,
       })
       .pipe(
         finalize(() => {

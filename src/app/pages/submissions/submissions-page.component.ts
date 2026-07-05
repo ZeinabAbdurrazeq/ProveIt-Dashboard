@@ -16,19 +16,14 @@ import { AdminApiService } from "../../core/services/admin-api.service";
         <div class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
           <div>
             <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">Submissions</p>
-            <h2 class="mt-2 text-2xl font-bold text-white">Problem submissions</h2>
+            <h2 class="mt-2 text-2xl font-bold text-base-content">Problem submissions</h2>
             <p class="mt-2 max-w-2xl text-sm text-base-content/60">
               Inspect each attempt with problem, user, language, result, and scoring details.
             </p>
           </div>
-          <div class="grid w-full gap-3 sm:grid-cols-2 xl:max-w-3xl xl:grid-cols-[1fr_160px_160px_auto]">
+          <div class="grid w-full gap-3 sm:grid-cols-2 xl:max-w-3xl xl:grid-cols-[1fr_160px_auto]">
             <input class="admin-input" type="text" placeholder="Search problem or language" [(ngModel)]="searchTerm" (keydown.enter)="search()" />
-            <select class="admin-input" [(ngModel)]="statusFilter" (change)="search()">
-              <option value="">All results</option>
-              <option value="accepted">Accepted</option>
-              <option value="rejected">Rejected</option>
-            </select>
-            <select class="admin-input" [(ngModel)]="difficultyFilter" (change)="search()">
+            <select class="select select-bordered w-full" [(ngModel)]="difficultyFilter" (change)="search()">
               <option value="">All levels</option>
               <option value="easy">Easy</option>
               <option value="medium">Medium</option>
@@ -49,7 +44,7 @@ import { AdminApiService } from "../../core/services/admin-api.service";
 
         <div *ngIf="!loading && submissions.length; else emptyState" class="overflow-x-auto">
           <table class="admin-table min-w-[920px]">
-            <thead class="bg-white/5">
+            <thead class="bg-base-200">
               <tr>
                 <th class="admin-th">User</th>
                 <th class="admin-th">Problem</th>
@@ -61,7 +56,7 @@ import { AdminApiService } from "../../core/services/admin-api.service";
                 <th class="admin-th">Date</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-white/10 bg-base-100">
+            <tbody class="divide-y divide-base-300 bg-base-100">
               <tr *ngFor="let submission of submissions">
                 <td class="admin-td">
                   <div class="flex items-center gap-3">
@@ -71,13 +66,13 @@ import { AdminApiService } from "../../core/services/admin-api.service";
                       class="h-10 w-10 rounded-2xl border border-base-300 object-cover"
                     />
                     <div>
-                      <p class="font-semibold text-white">{{ submission.userId?.name || 'Deleted user' }}</p>
+                      <p class="font-semibold text-base-content">{{ submission.userId?.name || 'Deleted user' }}</p>
                       <p class="text-xs text-base-content/60">{{ submission.userId?.email || 'No email' }}</p>
                     </div>
                   </div>
                 </td>
                 <td class="admin-td">
-                  <p class="font-semibold text-white">{{ submission.problemTitle }}</p>
+                  <p class="font-semibold text-base-content">{{ submission.problemTitle }}</p>
                   <p class="font-mono text-xs text-base-content/60">{{ submission.problemId }}</p>
                 </td>
                 <td class="admin-td">
@@ -112,7 +107,7 @@ import { AdminApiService } from "../../core/services/admin-api.service";
 
         <ng-template #emptyState>
           <div *ngIf="!loading" class="p-12 text-center text-base-content/60">
-            <p class="text-lg font-semibold text-white">No submissions found</p>
+            <p class="text-lg font-semibold text-base-content">No submissions found</p>
             <p class="mt-2 text-sm">Attempts will appear here after users run code on problems.</p>
           </div>
         </ng-template>
@@ -166,7 +161,6 @@ export class SubmissionsPageComponent implements OnInit {
         page: this.page,
         limit: this.pageSize,
         search: this.searchTerm.trim(),
-        status: this.statusFilter,
         difficulty: this.difficultyFilter,
       })
       .pipe(finalize(() => (this.loading = false)))

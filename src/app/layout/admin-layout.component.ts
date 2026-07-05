@@ -1,4 +1,4 @@
-﻿import { CommonModule } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { Component, DestroyRef, OnInit, inject } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
@@ -18,7 +18,7 @@ type AdminDensity = "comfortable" | "compact";
 
 const MAIN_THEME_STORAGE_KEY = "provelt-theme";
 const ADMIN_DENSITY_STORAGE_KEY = "provelt-admin-density";
-const DEFAULT_THEME = "proveit";
+const DEFAULT_THEME = "corporate";
 
 @Component({
   selector: "app-admin-layout",
@@ -99,12 +99,6 @@ const DEFAULT_THEME = "proveit";
                   <input type="search" [placeholder]="text.search" />
                 </label>
 
-                <label class="admin-theme-select">
-                  <span>{{ text.theme }}</span>
-                  <select [ngModel]="currentTheme" (ngModelChange)="setTheme($event)">
-                    <option *ngFor="let theme of themes" [value]="theme">{{ theme }}</option>
-                  </select>
-                </label>
 
                 <div class="admin-segmented" role="group" [attr.aria-label]="text.dataView">
                   <button type="button" [class.active]="currentDensity === 'comfortable'" (click)="setDensity('comfortable')">{{ text.comfortable }}</button>
@@ -137,38 +131,7 @@ export class AdminLayoutComponent implements OnInit {
   mainAppUrl = environment.mainAppUrl;
   currentTheme = DEFAULT_THEME;
   currentDensity: AdminDensity = "comfortable";
-  themes = [
-    "proveit",
-    "forest",
-    "nord",
-    "night",
-    "business",
-    "luxury",
-    "dracula",
-    "emerald",
-    "cupcake",
-    "corporate",
-    "synthwave",
-    "retro",
-    "cyberpunk",
-    "valentine",
-    "halloween",
-    "garden",
-    "aqua",
-    "lofi",
-    "pastel",
-    "fantasy",
-    "wireframe",
-    "black",
-    "cmyk",
-    "autumn",
-    "acid",
-    "lemonade",
-    "coffee",
-    "winter",
-    "dim",
-    "sunset",
-  ];
+
 
   navItems: NavItem[] = [
     { label: "Overview", path: "/dashboard", icon: "▣" },
@@ -196,7 +159,7 @@ export class AdminLayoutComponent implements OnInit {
   } as const;
 
   ngOnInit(): void {
-    this.currentTheme = this.readThemePreference();
+    this.currentTheme = DEFAULT_THEME;
     this.currentDensity = this.readPreference<AdminDensity>(ADMIN_DENSITY_STORAGE_KEY, "comfortable", ["comfortable", "compact"]);
     this.applyPreferences();
     this.updateTitle();
@@ -216,12 +179,6 @@ export class AdminLayoutComponent implements OnInit {
     this.mobileMenuOpen = false;
   }
 
-  setTheme(theme: string): void {
-    if (!this.themes.includes(theme)) return;
-    this.currentTheme = theme;
-    localStorage.setItem(MAIN_THEME_STORAGE_KEY, theme);
-    this.applyPreferences();
-  }
 
   setDensity(density: AdminDensity): void {
     this.currentDensity = density;
@@ -261,8 +218,4 @@ export class AdminLayoutComponent implements OnInit {
     return value && allowed.includes(value) ? value : fallback;
   }
 
-  private readThemePreference(): string {
-    const stored = localStorage.getItem(MAIN_THEME_STORAGE_KEY);
-    return stored && this.themes.includes(stored) ? stored : DEFAULT_THEME;
-  }
 }

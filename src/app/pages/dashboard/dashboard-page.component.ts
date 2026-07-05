@@ -1,4 +1,4 @@
-﻿import { CommonModule } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { Component, DestroyRef, OnInit, inject } from "@angular/core";
 import { BaseChartDirective } from "ng2-charts";
 import { ChartData, ChartOptions, ChartType, ChartDataset } from "chart.js";
@@ -30,29 +30,29 @@ interface StatCard {
       <section *ngIf="loading" class="space-y-6">
         <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
           <div *ngFor="let _ of skeletonArray" class="admin-panel p-5">
-            <div class="h-3 w-24 animate-pulse rounded-full bg-white/10"></div>
+            <div class="h-3 w-24 animate-pulse rounded-full bg-base-300"></div>
             <div
-              class="mt-5 h-8 w-20 animate-pulse rounded-2xl bg-white/10"
+              class="mt-5 h-8 w-20 animate-pulse rounded-2xl bg-base-300"
             ></div>
             <div
-              class="mt-4 h-3 w-32 animate-pulse rounded-full bg-white/10"
+              class="mt-4 h-3 w-32 animate-pulse rounded-full bg-base-300"
             ></div>
           </div>
         </div>
         <div class="grid gap-6 xl:grid-cols-2">
           <div class="admin-panel p-5">
-            <div class="h-72 animate-pulse rounded-3xl bg-white/5"></div>
+            <div class="h-72 animate-pulse rounded-3xl bg-base-200"></div>
           </div>
           <div class="admin-panel p-5">
-            <div class="h-72 animate-pulse rounded-3xl bg-white/5"></div>
+            <div class="h-72 animate-pulse rounded-3xl bg-base-200"></div>
           </div>
         </div>
         <div class="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
           <div class="admin-panel p-5">
-            <div class="h-80 animate-pulse rounded-3xl bg-white/5"></div>
+            <div class="h-80 animate-pulse rounded-3xl bg-base-200"></div>
           </div>
           <div class="admin-panel p-5">
-            <div class="h-80 animate-pulse rounded-3xl bg-white/5"></div>
+            <div class="h-80 animate-pulse rounded-3xl bg-base-200"></div>
           </div>
         </div>
       </section>
@@ -86,7 +86,7 @@ interface StatCard {
                 <p class="text-sm font-medium text-base-content/80">
                   {{ card.label }}
                 </p>
-                <p class="mt-3 text-3xl font-black tracking-tight text-white">
+                <p class="mt-3 text-3xl font-black tracking-tight text-base-content">
                   {{ formatCompact(card.value) }}
                 </p>
                 <p class="mt-2 text-xs text-base-content/60">{{ card.hint }}</p>
@@ -107,7 +107,7 @@ interface StatCard {
                 <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">
                   Trend
                 </p>
-                <h2 class="mt-2 text-xl font-bold text-white">
+                <h2 class="mt-2 text-xl font-bold text-base-content">
                   Sessions over time
                 </h2>
               </div>
@@ -129,7 +129,7 @@ interface StatCard {
                 <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">
                   Trend
                 </p>
-                <h2 class="mt-2 text-xl font-bold text-white">
+                <h2 class="mt-2 text-xl font-bold text-base-content">
                   AI interviews per day
                 </h2>
               </div>
@@ -153,7 +153,7 @@ interface StatCard {
                 <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">
                   Leaderboard
                 </p>
-                <h2 class="mt-2 text-xl font-bold text-white">
+                <h2 class="mt-2 text-xl font-bold text-base-content">
                   Top 10 candidates
                 </h2>
               </div>
@@ -165,7 +165,7 @@ interface StatCard {
               class="mt-5 overflow-x-auto rounded-3xl border border-base-300"
             >
               <table class="admin-table min-w-[760px]">
-                <thead class="bg-white/5">
+                <thead class="bg-base-200">
                   <tr>
                     <th class="admin-th">Rank</th>
                     <th class="admin-th">Candidate</th>
@@ -174,7 +174,7 @@ interface StatCard {
                     <th class="admin-th">Score</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-white/10 bg-base-100">
+                <tbody class="divide-y divide-base-300 bg-base-100">
                   <tr *ngFor="let candidate of topCandidates; index as index">
                     <td class="admin-td font-semibold text-base-content/60">
                       #{{ index + 1 }}
@@ -189,7 +189,7 @@ interface StatCard {
                           class="h-10 w-10 rounded-2xl border border-base-300 object-cover"
                         />
                         <div>
-                          <p class="font-semibold text-white">
+                          <p class="font-semibold text-base-content">
                             {{ candidate.userId?.name || "Unknown candidate" }}
                           </p>
                           <p class="text-xs text-base-content/60">
@@ -223,7 +223,7 @@ interface StatCard {
 
             <ng-template #noCandidates>
               <div
-                class="mt-5 rounded-3xl border border-dashed border-base-300 bg-white/5 p-10 text-center text-base-content/60"
+                class="mt-5 rounded-3xl border border-dashed border-base-300 bg-base-200 p-10 text-center text-base-content/60"
               >
                 No candidate profiles are available yet.
               </div>
@@ -235,7 +235,7 @@ interface StatCard {
               <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">
                 Subscriptions
               </p>
-              <h2 class="mt-2 text-xl font-bold text-white">
+              <h2 class="mt-2 text-xl font-bold text-base-content">
                 Plan distribution
               </h2>
             </div>
@@ -245,11 +245,11 @@ interface StatCard {
             >
               <article
                 *ngFor="let plan of subscriptionDistribution"
-                class="rounded-[1.75rem] border border-base-300 bg-white/5 p-4"
+                class="rounded-[1.75rem] border border-base-300 bg-base-200 p-4"
               >
                 <div class="flex items-center justify-between gap-3">
                   <div>
-                    <p class="text-sm font-semibold capitalize text-white">
+                    <p class="text-sm font-semibold capitalize text-base-content">
                       {{ plan.plan }}
                     </p>
                     <p class="text-xs text-base-content/60">{{ plan.count }} users</p>
@@ -269,10 +269,10 @@ interface StatCard {
                       class="absolute inset-2 rounded-full bg-[#08101c] p-3 text-center"
                     >
                       <div
-                        class="grid h-full place-items-center rounded-full border border-base-300 bg-white/5"
+                        class="grid h-full place-items-center rounded-full border border-base-300 bg-base-200"
                       >
                         <div>
-                          <p class="text-xl font-black text-white">
+                          <p class="text-xl font-black text-base-content">
                             {{ plan.count }}
                           </p>
                           <p
@@ -289,9 +289,9 @@ interface StatCard {
             </div>
 
             <div
-              class="mt-5 rounded-[1.75rem] border border-base-300 bg-white/5 p-4"
+              class="mt-5 rounded-[1.75rem] border border-base-300 bg-base-200 p-4"
             >
-              <p class="text-sm font-semibold text-white">Problem categories</p>
+              <p class="text-sm font-semibold text-base-content">Problem categories</p>
               <div
                 *ngIf="problemStats.length; else noProblems"
                 class="mt-4 space-y-3"
@@ -301,7 +301,7 @@ interface StatCard {
                   class="flex items-center justify-between gap-3 rounded-2xl border border-base-300 bg-[#08101c] px-4 py-3"
                 >
                   <div>
-                    <p class="font-medium text-white">{{ item.category }}</p>
+                    <p class="font-medium text-base-content">{{ item.category }}</p>
                     <p class="text-xs text-base-content/60">
                       {{ item.attempts }} attempts
                     </p>

@@ -52,12 +52,12 @@ const emptyForm = (): ProblemForm => ({
         <div class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
           <div>
             <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">Problem bank</p>
-            <h2 class="mt-2 text-2xl font-bold text-white">Problems</h2>
+            <h2 class="mt-2 text-2xl font-bold text-base-content">Problems</h2>
             <p class="mt-2 max-w-2xl text-sm text-base-content/60">Create, update, archive, and delete platform coding problems.</p>
           </div>
           <div class="grid w-full gap-3 sm:grid-cols-2 xl:max-w-3xl xl:grid-cols-[1fr_160px_auto_auto]">
             <input class="admin-input" type="text" placeholder="Search title, id, or category" [(ngModel)]="searchTerm" (keydown.enter)="search()" />
-            <select class="admin-input sm:max-w-44" [(ngModel)]="difficultyFilter" (change)="search()">
+            <select class="select select-bordered w-full sm:max-w-44" [(ngModel)]="difficultyFilter" (change)="search()">
               <option value="">All levels</option>
               <option value="Easy">Easy</option>
               <option value="Medium">Medium</option>
@@ -79,11 +79,11 @@ const emptyForm = (): ProblemForm => ({
             <div *ngIf="loading" class="p-8 text-base-content/70">Loading problems...</div>
 
             <div *ngIf="!loading && problems.length === 0" class="p-10 text-center text-base-content/60">
-              <p class="text-lg font-semibold text-white">No problems found</p>
+              <p class="text-lg font-semibold text-base-content">No problems found</p>
               <p class="mt-2 text-sm">Create the first problem from the editor.</p>
             </div>
 
-            <div *ngIf="!loading && problems.length" class="divide-y divide-white/10">
+            <div *ngIf="!loading && problems.length" class="divide-y divide-base-300">
               <article *ngFor="let problem of problems" class="p-5">
                 <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div class="min-w-0">
@@ -96,7 +96,7 @@ const emptyForm = (): ProblemForm => ({
                         {{ problem.active ? 'Active' : 'Archived' }}
                       </span>
                     </div>
-                    <h3 class="mt-3 break-words text-xl font-bold text-white">{{ problem.title }}</h3>
+                    <h3 class="mt-3 break-words text-xl font-bold text-base-content">{{ problem.title }}</h3>
                     <p class="mt-2 break-words text-sm text-base-content/65">{{ problem.description.text || 'No description yet.' }}</p>
                     <p class="mt-2 font-mono text-xs text-base-content/45">/{{ problem.id }}</p>
                   </div>
@@ -124,7 +124,7 @@ const emptyForm = (): ProblemForm => ({
         <form class="admin-panel problem-editor-panel space-y-5 p-5" (ngSubmit)="saveProblem()">
           <div>
             <p class="text-sm uppercase tracking-[0.24em] text-base-content/70">{{ editingId ? 'Edit problem' : 'Create problem' }}</p>
-            <h3 class="mt-2 text-xl font-bold text-white">{{ form.title || 'Untitled problem' }}</h3>
+            <h3 class="mt-2 text-xl font-bold text-base-content">{{ form.title || 'Untitled problem' }}</h3>
           </div>
 
           <div class="grid gap-4 sm:grid-cols-2">
@@ -141,7 +141,7 @@ const emptyForm = (): ProblemForm => ({
           <div class="grid gap-4 sm:grid-cols-2">
             <label class="space-y-2">
               <span class="problem-field-label">Difficulty</span>
-              <select class="admin-input" [(ngModel)]="form.difficulty" name="difficulty">
+              <select class="select select-bordered w-full" [(ngModel)]="form.difficulty" name="difficulty">
                 <option value="Easy">Easy</option>
                 <option value="Medium">Medium</option>
                 <option value="Hard">Hard</option>
@@ -174,14 +174,14 @@ const emptyForm = (): ProblemForm => ({
           </label>
 
           <div class="space-y-3">
-            <h4 class="font-bold text-white">Starter code</h4>
+            <h4 class="font-bold text-base-content">Starter code</h4>
             <textarea class="admin-input min-h-32 font-mono text-xs" placeholder="JavaScript starter" [(ngModel)]="form.javascriptStarter" name="javascriptStarter"></textarea>
             <textarea class="admin-input min-h-32 font-mono text-xs" placeholder="Python starter" [(ngModel)]="form.pythonStarter" name="pythonStarter"></textarea>
             <textarea class="admin-input min-h-32 font-mono text-xs" placeholder="Java starter" [(ngModel)]="form.javaStarter" name="javaStarter"></textarea>
           </div>
 
           <div class="space-y-3">
-            <h4 class="font-bold text-white">Expected output</h4>
+            <h4 class="font-bold text-base-content">Expected output</h4>
             <textarea class="admin-input min-h-20 font-mono text-xs" placeholder="JavaScript expected output" [(ngModel)]="form.javascriptExpected" name="javascriptExpected"></textarea>
             <textarea class="admin-input min-h-20 font-mono text-xs" placeholder="Python expected output" [(ngModel)]="form.pythonExpected" name="pythonExpected"></textarea>
             <textarea class="admin-input min-h-20 font-mono text-xs" placeholder="Java expected output" [(ngModel)]="form.javaExpected" name="javaExpected"></textarea>

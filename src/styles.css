@@ -1,4 +1,4 @@
-﻿@tailwind base;
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -401,26 +401,7 @@ article,
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--admin-primary) 20%, transparent);
 }
 
-select.admin-input {
-  appearance: none;
-  padding-inline-end: 2.75rem;
-  background-image:
-    linear-gradient(45deg, transparent 50%, var(--admin-muted) 50%),
-    linear-gradient(135deg, var(--admin-muted) 50%, transparent 50%);
-  background-position:
-    calc(100% - 1.25rem) 50%,
-    calc(100% - 0.9rem) 50%;
-  background-size: 0.36rem 0.36rem, 0.36rem 0.36rem;
-  background-repeat: no-repeat;
-}
 
-[dir="rtl"] select.admin-input {
-  padding-inline-end: 1rem;
-  padding-inline-start: 2.75rem;
-  background-position:
-    1.1rem 50%,
-    1.45rem 50%;
-}
 
 .admin-button {
   display: inline-flex;
@@ -517,19 +498,7 @@ select.admin-input {
   padding-bottom: 0.62rem;
 }
 
-body[data-theme="corporate"] .text-white {
-  color: var(--admin-text) !important;
-}
 
-body[data-theme="corporate"] .bg-base-100,
-body[data-theme="corporate"] .bg-base-200 {
-  background-color: var(--admin-surface) !important;
-}
-
-body[data-theme="corporate"] .bg-white\/5,
-body[data-theme="corporate"] .bg-white\/10 {
-  background-color: color-mix(in srgb, var(--admin-muted) 10%, transparent) !important;
-}
 
 @media (max-width: 768px) {
   .admin-search-field,

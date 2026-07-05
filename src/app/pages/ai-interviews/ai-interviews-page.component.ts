@@ -1,4 +1,4 @@
-﻿import { CommonModule } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { Component, OnInit, inject } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { finalize } from "rxjs";
@@ -16,28 +16,20 @@ import { AdminInterview, InterviewQuestionBreakdown } from "../../core/models/ad
         <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">Management</p>
-            <h2 class="mt-2 text-2xl font-bold text-white">AI interviews</h2>
+            <h2 class="mt-2 text-2xl font-bold text-base-content">AI interviews</h2>
             <p class="mt-2 text-sm text-base-content/60">Inspect scores and expand each interview for a full question breakdown.</p>
           </div>
-          <label class="flex w-full flex-col gap-2 sm:max-w-xs">
-            <span class="text-sm text-base-content/60">Status filter</span>
-            <select class="admin-input" [(ngModel)]="statusFilter" (change)="applyFilter()">
-              <option value="all">All</option>
-              <option value="in-progress">In progress</option>
-              <option value="completed">Completed</option>
-            </select>
-          </label>
         </div>
       </section>
 
       <section *ngIf="loading" class="admin-panel p-5">
         <div class="space-y-3">
-          <div *ngFor="let _ of skeletonRows" class="grid grid-cols-5 gap-4 rounded-3xl border border-base-300 bg-white/5 p-4">
-            <div class="h-4 animate-pulse rounded-full bg-white/10"></div>
-            <div class="h-4 animate-pulse rounded-full bg-white/10"></div>
-            <div class="h-4 animate-pulse rounded-full bg-white/10"></div>
-            <div class="h-4 animate-pulse rounded-full bg-white/10"></div>
-            <div class="h-4 animate-pulse rounded-full bg-white/10"></div>
+          <div *ngFor="let _ of skeletonRows" class="grid grid-cols-5 gap-4 rounded-3xl border border-base-300 bg-base-200 p-4">
+            <div class="h-4 animate-pulse rounded-full bg-base-300"></div>
+            <div class="h-4 animate-pulse rounded-full bg-base-300"></div>
+            <div class="h-4 animate-pulse rounded-full bg-base-300"></div>
+            <div class="h-4 animate-pulse rounded-full bg-base-300"></div>
+            <div class="h-4 animate-pulse rounded-full bg-base-300"></div>
           </div>
         </div>
       </section>
@@ -51,7 +43,7 @@ import { AdminInterview, InterviewQuestionBreakdown } from "../../core/models/ad
       <section *ngIf="!loading && !error" class="admin-panel overflow-hidden p-0">
         <div *ngIf="interviews.length; else emptyInterviews" class="overflow-x-auto">
           <table class="admin-table min-w-[860px]">
-            <thead class="bg-white/5">
+            <thead class="bg-base-200">
               <tr>
                 <th class="admin-th">Candidate</th>
                 <th class="admin-th">Field</th>
@@ -61,9 +53,9 @@ import { AdminInterview, InterviewQuestionBreakdown } from "../../core/models/ad
                 <th class="admin-th">Date</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-white/10 bg-base-100">
+            <tbody class="divide-y divide-base-300 bg-base-100">
               <ng-container *ngFor="let interview of interviews">
-                <tr class="cursor-pointer transition hover:bg-white/5" (click)="toggleInterview(interview._id)">
+                <tr class="cursor-pointer transition hover:bg-base-200" (click)="toggleInterview(interview._id)">
                   <td class="admin-td">
                     <div class="flex items-center gap-3">
                       <img
@@ -72,7 +64,7 @@ import { AdminInterview, InterviewQuestionBreakdown } from "../../core/models/ad
                         class="h-10 w-10 rounded-2xl border border-base-300 object-cover"
                       />
                       <div>
-                        <p class="font-semibold text-white">{{ interview.userId?.name || 'Unknown candidate' }}</p>
+                        <p class="font-semibold text-base-content">{{ interview.userId?.name || 'Unknown candidate' }}</p>
                         <p class="text-xs text-base-content/60">{{ interview.userId?.email || 'No email' }}</p>
                       </div>
                     </div>
@@ -99,13 +91,13 @@ import { AdminInterview, InterviewQuestionBreakdown } from "../../core/models/ad
                       <div class="space-y-4">
                         <div>
                           <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">Question breakdown</p>
-                          <h3 class="mt-2 text-lg font-bold text-white">Per-question feedback</h3>
+                          <h3 class="mt-2 text-lg font-bold text-base-content">Per-question feedback</h3>
                         </div>
                         <div *ngIf="interview.questions.length; else noQuestions" class="space-y-3">
-                          <article *ngFor="let question of interview.questions" class="rounded-3xl border border-base-300 bg-white/5 p-4">
+                          <article *ngFor="let question of interview.questions" class="rounded-3xl border border-base-300 bg-base-200 p-4">
                             <div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                               <div>
-                                <p class="text-sm font-semibold text-white">{{ question.questionText }}</p>
+                                <p class="text-sm font-semibold text-base-content">{{ question.questionText }}</p>
                                 <p class="mt-1 text-xs uppercase tracking-[0.2em] text-base-content/60">{{ question.topic || 'general' }} · {{ question.difficulty || 'n/a' }}</p>
                               </div>
                               <span class="rounded-full px-3 py-1 text-xs font-bold" [ngClass]="scoreBadgeClass(question.score)">
@@ -117,7 +109,7 @@ import { AdminInterview, InterviewQuestionBreakdown } from "../../core/models/ad
                           </article>
                         </div>
                         <ng-template #noQuestions>
-                          <div class="rounded-3xl border border-dashed border-base-300 bg-white/5 p-6 text-sm text-base-content/60">
+                          <div class="rounded-3xl border border-dashed border-base-300 bg-base-200 p-6 text-sm text-base-content/60">
                             This interview has no question breakdown yet.
                           </div>
                         </ng-template>
@@ -126,20 +118,20 @@ import { AdminInterview, InterviewQuestionBreakdown } from "../../core/models/ad
                       <div class="space-y-4">
                         <div>
                           <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">Summary</p>
-                          <h3 class="mt-2 text-lg font-bold text-white">Overall feedback</h3>
+                          <h3 class="mt-2 text-lg font-bold text-base-content">Overall feedback</h3>
                         </div>
-                        <div class="rounded-3xl border border-base-300 bg-white/5 p-5">
+                        <div class="rounded-3xl border border-base-300 bg-base-200 p-5">
                           <p class="ai-message text-sm leading-7 text-base-content/80">{{ interview.overallFeedback || 'No overall feedback is available yet.' }}</p>
                         </div>
                         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
-                          <div class="rounded-3xl border border-base-300 bg-white/5 p-4">
+                          <div class="rounded-3xl border border-base-300 bg-base-200 p-4">
                             <p class="text-xs uppercase tracking-[0.24em] text-base-content/60">Strengths</p>
                             <div class="mt-3 flex flex-wrap gap-2">
                               <span *ngFor="let item of interview.strengths" class="admin-chip">{{ item }}</span>
                               <span *ngIf="!interview.strengths.length" class="text-sm text-base-content/60">None recorded</span>
                             </div>
                           </div>
-                          <div class="rounded-3xl border border-base-300 bg-white/5 p-4">
+                          <div class="rounded-3xl border border-base-300 bg-base-200 p-4">
                             <p class="text-xs uppercase tracking-[0.24em] text-base-content/60">Weaknesses</p>
                             <div class="mt-3 flex flex-wrap gap-2">
                               <span *ngFor="let item of interview.weaknesses" class="admin-chip">{{ item }}</span>
@@ -158,7 +150,7 @@ import { AdminInterview, InterviewQuestionBreakdown } from "../../core/models/ad
 
         <ng-template #emptyInterviews>
           <div class="p-12 text-center text-base-content/60">
-            <p class="text-lg font-semibold text-white">No AI interviews found</p>
+            <p class="text-lg font-semibold text-base-content">No AI interviews found</p>
             <p class="mt-2 text-sm">There are no interviews for the selected filter.</p>
           </div>
         </ng-template>
@@ -220,7 +212,6 @@ export class AiInterviewsPageComponent implements OnInit {
       .getAiInterviews({
         page: this.page,
         limit: this.pageSize,
-        status: this.statusFilter === "all" ? "" : this.statusFilter,
       })
       .pipe(
         finalize(() => {
