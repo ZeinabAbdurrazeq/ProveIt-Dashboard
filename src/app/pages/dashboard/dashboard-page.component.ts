@@ -9,7 +9,6 @@ import {
   DashboardStatsResponse,
   LeaderboardCandidate,
   ProblemStat,
-  SubscriptionDistributionItem,
   TimeSeriesResponse,
 } from "../../core/models/admin.models";
 
@@ -233,72 +232,26 @@ interface StatCard {
           <section class="admin-panel p-5">
             <div>
               <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">
-                Subscriptions
+                Performance
               </p>
               <h2 class="mt-2 text-xl font-bold text-base-content">
-                Plan distribution
+                Problem categories
               </h2>
-            </div>
-
-            <div
-              class="mt-5 grid gap-4 sm:grid-cols-3 xl:grid-cols-1 2xl:grid-cols-3"
-            >
-              <article
-                *ngFor="let plan of subscriptionDistribution"
-                class="rounded-[1.75rem] border border-base-300 bg-base-200 p-4"
-              >
-                <div class="flex items-center justify-between gap-3">
-                  <div>
-                    <p class="text-sm font-semibold capitalize text-base-content">
-                      {{ plan.plan }}
-                    </p>
-                    <p class="text-xs text-base-content/60">{{ plan.count }} users</p>
-                  </div>
-                  <span class="text-sm font-semibold text-emerald-300"
-                    >{{ plan.percentage }}%</span
-                  >
-                </div>
-                <div class="mt-4 flex items-center justify-center">
-                  <div
-                    class="relative h-28 w-28 rounded-full"
-                    [style.background]="
-                      subscriptionRingStyle(plan.plan, plan.percentage)
-                    "
-                  >
-                    <div
-                      class="absolute inset-2 rounded-full bg-[#08101c] p-3 text-center"
-                    >
-                      <div
-                        class="grid h-full place-items-center rounded-full border border-base-300 bg-base-200"
-                      >
-                        <div>
-                          <p class="text-xl font-black text-base-content">
-                            {{ plan.count }}
-                          </p>
-                          <p
-                            class="text-[10px] uppercase tracking-[0.24em] text-base-content/60"
-                          >
-                            {{ plan.plan }}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </article>
+              <p class="mt-2 text-sm text-base-content/60">
+                Subscription analytics moved to the Subscriptions page.
+              </p>
             </div>
 
             <div
               class="mt-5 rounded-[1.75rem] border border-base-300 bg-base-200 p-4"
             >
-              <p class="text-sm font-semibold text-base-content">Problem categories</p>
               <div
                 *ngIf="problemStats.length; else noProblems"
                 class="mt-4 space-y-3"
               >
                 <div
                   *ngFor="let item of problemStats"
-                  class="flex items-center justify-between gap-3 rounded-2xl border border-base-300 bg-[#08101c] px-4 py-3"
+                  class="flex items-center justify-between gap-3 rounded-2xl border border-base-300 bg-base-100 px-4 py-3"
                 >
                   <div>
                     <p class="font-medium text-base-content">{{ item.category }}</p>
@@ -316,7 +269,7 @@ interface StatCard {
               </div>
               <ng-template #noProblems>
                 <div
-                  class="mt-4 rounded-2xl border border-dashed border-base-300 bg-[#08101c] p-4 text-sm text-base-content/60"
+                  class="mt-4 rounded-2xl border border-dashed border-base-300 bg-base-100 p-4 text-sm text-base-content/60"
                 >
                   No problem statistics yet.
                 </div>
@@ -341,7 +294,6 @@ export class DashboardPageComponent implements OnInit {
 
   statCards: StatCard[] = [];
   topCandidates: LeaderboardCandidate[] = [];
-  subscriptionDistribution: SubscriptionDistributionItem[] = [];
   problemStats: ProblemStat[] = [];
 
   lineChartType: "line" = "line";
@@ -490,8 +442,6 @@ export class DashboardPageComponent implements OnInit {
   }
 
   private applyStats(stats: DashboardStatsResponse): void {
-    this.subscriptionDistribution = stats.subscriptionDistribution || [];
-
     this.statCards = [
       {
         label: "Total Users",
@@ -600,22 +550,6 @@ export class DashboardPageComponent implements OnInit {
     }
 
     return "bg-rose-400/15 text-rose-300 border border-rose-400/20";
-  }
-
-  subscriptionRingStyle(
-    plan: string,
-    percentage: number,
-  ): Record<string, string> {
-    const value = Math.max(0, Math.min(percentage || 0, 100));
-    const colors: Record<string, string> = {
-      free: "rgba(148, 163, 184, 0.95)",
-      pro: "rgba(16, 185, 129, 0.95)",
-      premium: "rgba(59, 130, 246, 0.95)",
-    };
-
-    return {
-      background: `conic-gradient(${colors[plan] || colors["free"]} ${value * 3.6}deg, rgba(255,255,255,0.08) 0deg)`,
-    };
   }
 
   formatDate(value: string): string {
