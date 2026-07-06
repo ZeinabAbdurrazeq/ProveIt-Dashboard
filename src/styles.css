@@ -192,8 +192,8 @@ article,
 }
 
 .admin-brand-mark {
-  background: linear-gradient(135deg, var(--admin-primary), var(--admin-secondary));
-  color: white;
+  background: color-mix(in srgb, var(--admin-warning) 14%, var(--admin-surface));
+  border: 1px solid color-mix(in srgb, var(--admin-primary) 18%, var(--admin-border));
   box-shadow: var(--admin-shadow-sm);
 }
 
