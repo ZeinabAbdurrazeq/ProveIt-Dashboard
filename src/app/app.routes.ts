@@ -11,6 +11,7 @@ import { BlogPostsPageComponent } from "./pages/blog-posts/blog-posts-page.compo
 import { ProblemsPageComponent } from "./pages/problems/problems-page.component";
 import { SubmissionsPageComponent } from "./pages/submissions/submissions-page.component";
 import { SubscriptionsPageComponent } from "./pages/subscriptions/subscriptions-page.component";
+import { LeaderboardPageComponent } from "./pages/leaderboard/leaderboard-page.component";
 
 export const routes: Routes = [
   {
@@ -30,6 +31,7 @@ export const routes: Routes = [
       { path: "ai-interviews", component: AiInterviewsPageComponent, data: { title: "AI interviews", titleEn: "AI interviews" } },
       { path: "problems", component: ProblemsPageComponent, data: { title: "Problems", titleEn: "Problems" } },
       { path: "submissions", component: SubmissionsPageComponent, data: { title: "Submissions", titleEn: "Submissions" } },
+      { path: "leaderboard", component: LeaderboardPageComponent, data: { title: "Leaderboard", titleEn: "Leaderboard" } },
       { path: "subscriptions", component: SubscriptionsPageComponent, data: { title: "Subscriptions", titleEn: "Subscriptions" } },
       { path: "blog-posts", component: BlogPostsPageComponent, data: { title: "Blog", titleEn: "Blog" } },
       { path: "**", redirectTo: "dashboard" },

@@ -88,7 +88,11 @@ const DEFAULT_THEME: AdminTheme = "corporate";
 
               <div class="flex flex-col gap-3 md:flex-row md:items-center">
                 <a class="admin-home-link" [href]="mainAppUrl" [attr.aria-label]="text.home" [title]="text.home">
-                  <span>⌂</span>
+                  <svg viewBox="0 0 24 24" aria-hidden="true" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m3 10.5 9-7 9 7"></path>
+                    <path d="M5 9.5V21h14V9.5"></path>
+                    <path d="M9 21v-7h6v7"></path>
+                  </svg>
                 </a>
 
                 <button class="admin-theme-toggle" type="button" (click)="toggleTheme()" [attr.aria-label]="text.toggleTheme">
@@ -133,6 +137,7 @@ export class AdminLayoutComponent implements OnInit {
     { label: "AI interviews", path: "/ai-interviews", icon: "✦" },
     { label: "Problems", path: "/problems", icon: "⌘" },
     { label: "Submissions", path: "/submissions", icon: "✓" },
+    { label: "Leaderboard", path: "/leaderboard", icon: "★" },
     { label: "Subscriptions", path: "/subscriptions", icon: "◉" },
     { label: "Blog", path: "/blog-posts", icon: "✎" },
   ];
