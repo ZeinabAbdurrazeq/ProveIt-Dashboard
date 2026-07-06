@@ -67,14 +67,6 @@ const DEFAULT_THEME = "corporate";
           </nav>
 
           <div class="space-y-3 border-t border-base-300 px-3 py-4">
-            <div class="admin-session-card rounded-2xl border border-base-300 p-4">
-              <p class="text-sm font-semibold text-base-content">{{ text.adminAccess }}</p>
-              <p class="mt-1 text-xs leading-5 text-base-content/60">{{ text.sharedSession }}</p>
-            </div>
-            <a class="admin-button-secondary w-full justify-start" [href]="mainAppUrl">
-              <span>↗</span>
-              <span>{{ text.backToSite }}</span>
-            </a>
             <button class="admin-button-secondary w-full justify-start" type="button" (click)="logout()">
               <span>⎋</span>
               <span>{{ text.logout }}</span>
@@ -94,6 +86,10 @@ const DEFAULT_THEME = "corporate";
               </div>
 
               <div class="flex flex-col gap-3 md:flex-row md:items-center">
+                <a class="admin-icon-button" [href]="mainAppUrl" [attr.aria-label]="text.home">
+                  <span>⌂</span>
+                </a>
+
                 <label class="admin-search-field">
                   <span>⌕</span>
                   <input type="search" [placeholder]="text.search" />
@@ -146,9 +142,7 @@ export class AdminLayoutComponent implements OnInit {
 
   readonly text = {
     portal: "Admin portal",
-    adminAccess: "Admin access",
-    sharedSession: "Session is shared with Clerk on the main website.",
-    backToSite: "Back to website",
+    home: "Back to main app",
     logout: "Sign out",
     openMenu: "Open menu",
     search: "Quick search...",
