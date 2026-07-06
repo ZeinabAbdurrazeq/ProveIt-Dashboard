@@ -15,10 +15,11 @@ interface NavItem {
 }
 
 type AdminDensity = "comfortable" | "compact";
+type AdminTheme = "corporate" | "night";
 
 const MAIN_THEME_STORAGE_KEY = "provelt-theme";
 const ADMIN_DENSITY_STORAGE_KEY = "provelt-admin-density";
-const DEFAULT_THEME = "corporate";
+const DEFAULT_THEME: AdminTheme = "corporate";
 
 @Component({
   selector: "app-admin-layout",
@@ -86,20 +87,16 @@ const DEFAULT_THEME = "corporate";
               </div>
 
               <div class="flex flex-col gap-3 md:flex-row md:items-center">
-                <a class="admin-icon-button" [href]="mainAppUrl" [attr.aria-label]="text.home">
+                <a class="admin-home-link" [href]="mainAppUrl" [attr.aria-label]="text.home" [title]="text.home">
                   <span>⌂</span>
                 </a>
 
-                <label class="admin-search-field">
-                  <span>⌕</span>
-                  <input type="search" [placeholder]="text.search" />
-                </label>
-
-
-                <div class="admin-segmented" role="group" [attr.aria-label]="text.dataView">
-                  <button type="button" [class.active]="currentDensity === 'comfortable'" (click)="setDensity('comfortable')">{{ text.comfortable }}</button>
-                  <button type="button" [class.active]="currentDensity === 'compact'" (click)="setDensity('compact')">{{ text.compact }}</button>
-                </div>
+                <button class="admin-theme-toggle" type="button" (click)="toggleTheme()" [attr.aria-label]="text.toggleTheme">
+                  <span class="admin-theme-toggle-track">
+                    <span class="admin-theme-toggle-thumb" [class.is-dark]="currentTheme === 'night'"></span>
+                  </span>
+                  <span>{{ currentTheme === 'night' ? text.dark : text.light }}</span>
+                </button>
 
                 <span class="admin-chip">{{ text.admin }}</span>
                 <span class="hidden rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-2 text-sm font-semibold text-emerald-400 sm:inline-flex">{{ adminEmail }}</span>
@@ -125,8 +122,8 @@ export class AdminLayoutComponent implements OnInit {
   pageTitle = "Overview";
   adminEmail = environment.adminEmail;
   mainAppUrl = environment.mainAppUrl;
-  currentTheme = DEFAULT_THEME;
-  currentDensity: AdminDensity = "comfortable";
+  currentTheme: AdminTheme = DEFAULT_THEME;
+  currentDensity: AdminDensity = "compact";
 
 
   navItems: NavItem[] = [
@@ -145,17 +142,16 @@ export class AdminLayoutComponent implements OnInit {
     home: "Back to main app",
     logout: "Sign out",
     openMenu: "Open menu",
-    search: "Quick search...",
-    theme: "Theme",
-    dataView: "Data view",
-    comfortable: "Comfort",
-    compact: "Compact",
+    toggleTheme: "Toggle dark or light mode",
+    light: "Light",
+    dark: "Dark",
     admin: "Admin",
   } as const;
 
   ngOnInit(): void {
-    this.currentTheme = DEFAULT_THEME;
-    this.currentDensity = this.readPreference<AdminDensity>(ADMIN_DENSITY_STORAGE_KEY, "comfortable", ["comfortable", "compact"]);
+    this.currentTheme = this.readPreference<AdminTheme>(MAIN_THEME_STORAGE_KEY, DEFAULT_THEME, ["corporate", "night"]);
+    this.currentDensity = "compact";
+    localStorage.setItem(ADMIN_DENSITY_STORAGE_KEY, this.currentDensity);
     this.applyPreferences();
     this.updateTitle();
 
@@ -178,6 +174,12 @@ export class AdminLayoutComponent implements OnInit {
   setDensity(density: AdminDensity): void {
     this.currentDensity = density;
     localStorage.setItem(ADMIN_DENSITY_STORAGE_KEY, density);
+    this.applyPreferences();
+  }
+
+  toggleTheme(): void {
+    this.currentTheme = this.currentTheme === "night" ? "corporate" : "night";
+    localStorage.setItem(MAIN_THEME_STORAGE_KEY, this.currentTheme);
     this.applyPreferences();
   }
 
