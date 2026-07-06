@@ -37,10 +37,9 @@ const emptyForm = (): UserForm => ({
             <h2 class="mt-2 text-2xl font-bold text-base-content">Users</h2>
             <p class="mt-2 text-sm text-base-content/60">Manage user records and update permissions without crowded menus.</p>
           </div>
-          <div class="grid w-full gap-3 sm:grid-cols-[1fr_auto_auto] lg:max-w-xl">
+          <div class="grid w-full gap-3 sm:grid-cols-[1fr_auto] lg:max-w-xl">
             <input class="admin-input" type="text" placeholder="Search name or email" [(ngModel)]="searchTerm" (keydown.enter)="search()" />
             <button class="admin-button-secondary" type="button" (click)="search()">Search</button>
-            <button class="admin-button" type="button" (click)="startCreate()">New user</button>
           </div>
         </div>
       </section>
@@ -101,9 +100,6 @@ const emptyForm = (): UserForm => ({
                     <td class="admin-td">
                       <div class="flex flex-wrap gap-2">
                         <button class="admin-button-secondary !px-3 !py-2" type="button" (click)="startEdit(user)">Edit</button>
-                        <button class="admin-button-secondary !px-3 !py-2" type="button" (click)="toggleRole(user)">
-                          {{ user.role === 'admin' ? 'Make user' : 'Make admin' }}
-                        </button>
                         <button class="rounded-2xl border border-red-600 bg-red-50 px-3 py-2 text-sm font-bold text-red-700 transition hover:bg-red-100" type="button" (click)="deleteUser(user)">Delete</button>
                       </div>
                     </td>

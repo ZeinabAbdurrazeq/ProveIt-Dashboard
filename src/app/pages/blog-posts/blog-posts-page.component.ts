@@ -38,7 +38,6 @@ const emptyForm = (): BlogForm => ({
           <div class="flex w-full flex-col gap-3 sm:flex-row xl:max-w-xl">
             <input class="admin-input" type="text" placeholder="Search posts" [(ngModel)]="searchTerm" (keydown.enter)="loadPosts()" />
             <button class="admin-button-secondary" type="button" (click)="loadPosts()">Search</button>
-            <button class="admin-button" type="button" (click)="startCreate()">New post</button>
           </div>
         </div>
       </section>
@@ -75,7 +74,7 @@ const emptyForm = (): BlogForm => ({
                   <button class="admin-button-secondary" type="button" (click)="togglePublish(post)">
                     {{ post.published ? 'Unpublish' : 'Publish' }}
                   </button>
-                  <button class="rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-100" type="button" (click)="deletePost(post)">Delete</button>
+                  <button class="rounded-2xl border border-red-600 bg-red-50 px-4 py-2 text-sm font-bold text-red-700 transition hover:bg-red-100" type="button" (click)="deletePost(post)">Delete</button>
                 </div>
               </div>
             </article>

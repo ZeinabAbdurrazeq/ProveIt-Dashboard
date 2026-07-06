@@ -130,6 +130,64 @@ const PLAN_DEFINITIONS: PlanDefinition[] = [
           </article>
         </div>
 
+        <section class="grid gap-5 xl:grid-cols-2">
+          <article class="admin-panel p-5">
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">Plan share</p>
+                <h2 class="mt-2 text-xl font-bold text-base-content">Users plan circle chart</h2>
+              </div>
+              <span class="admin-chip">{{ totalSubscriptionUsers }} users</span>
+            </div>
+
+            <div class="mt-6 grid gap-6 md:grid-cols-[220px_minmax(0,1fr)] md:items-center">
+              <div class="subscription-donut mx-auto" [style.background]="distributionDonutStyle()">
+                <div class="subscription-donut-core">
+                  <p class="text-3xl font-black text-base-content">{{ paidRatio }}%</p>
+                  <p class="mt-1 text-xs uppercase tracking-[0.18em] text-base-content/60">paid access</p>
+                </div>
+              </div>
+
+              <div class="space-y-3">
+                <div *ngFor="let plan of allPlanRows" class="flex items-center justify-between gap-3 rounded-2xl border border-base-300 bg-base-200/70 px-4 py-3">
+                  <div class="flex min-w-0 items-center gap-3">
+                    <span class="h-3 w-3 shrink-0 rounded-full" [style.background]="planColor(plan.key)"></span>
+                    <div class="min-w-0">
+                      <p class="truncate text-sm font-bold text-base-content">{{ plan.name }}</p>
+                      <p class="text-xs text-base-content/55">{{ distributionFor(plan.key).percentage }}% of subscriptions</p>
+                    </div>
+                  </div>
+                  <span class="text-lg font-black text-base-content">{{ distributionFor(plan.key).count }}</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="admin-panel p-5">
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">Plan volume</p>
+                <h2 class="mt-2 text-xl font-bold text-base-content">Users by plan</h2>
+              </div>
+              <span class="admin-chip">Live distribution</span>
+            </div>
+
+            <div class="subscription-bar-chart mt-6">
+              <div *ngFor="let plan of allPlanRows" class="subscription-bar-item">
+                <div class="subscription-bar-track">
+                  <div
+                    class="subscription-bar-fill"
+                    [style.height.%]="chartBarHeight(plan.key)"
+                    [style.background]="planColor(plan.key)"
+                  ></div>
+                </div>
+                <p class="mt-3 text-center text-xs font-bold text-base-content">{{ distributionFor(plan.key).count }}</p>
+                <p class="mt-1 text-center text-[11px] font-semibold text-base-content/55">{{ plan.name }}</p>
+              </div>
+            </div>
+          </article>
+        </section>
+
         <div class="grid gap-5 lg:grid-cols-3">
           <article
             *ngFor="let plan of visiblePlans"
@@ -222,6 +280,59 @@ const PLAN_DEFINITIONS: PlanDefinition[] = [
       </section>
     </div>
   `,
+  styles: [`
+    .subscription-donut {
+      position: relative;
+      display: grid;
+      height: 13rem;
+      width: 13rem;
+      place-items: center;
+      border-radius: 999px;
+      box-shadow: var(--admin-shadow-sm);
+    }
+
+    .subscription-donut-core {
+      display: grid;
+      height: 8.5rem;
+      width: 8.5rem;
+      place-items: center;
+      border-radius: 999px;
+      border: 1px solid var(--admin-border);
+      background: var(--admin-surface);
+      text-align: center;
+    }
+
+    .subscription-bar-chart {
+      display: grid;
+      min-height: 16rem;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+      align-items: end;
+    }
+
+    .subscription-bar-item {
+      min-width: 0;
+    }
+
+    .subscription-bar-track {
+      position: relative;
+      height: 11rem;
+      overflow: hidden;
+      border-radius: 1.25rem;
+      border: 1px solid var(--admin-border);
+      background: color-mix(in srgb, var(--admin-muted) 12%, transparent);
+    }
+
+    .subscription-bar-fill {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      min-height: 0.35rem;
+      border-radius: 1.25rem 1.25rem 0 0;
+      transition: height 0.25s ease;
+    }
+  `],
 })
 export class SubscriptionsPageComponent implements OnInit {
   private readonly api = inject(AdminApiService);
@@ -289,6 +400,35 @@ export class SubscriptionsPageComponent implements OnInit {
         percentage: 0,
       }
     );
+  }
+
+  distributionDonutStyle(): string {
+    if (!this.totalSubscriptionUsers) {
+      return "conic-gradient(color-mix(in srgb, var(--admin-muted) 20%, transparent) 0deg 360deg)";
+    }
+
+    let cursor = 0;
+    const segments = this.allPlanRows
+      .map((plan) => {
+        const percentage = Math.max(0, Number(this.distributionFor(plan.key).percentage || 0));
+        if (!percentage) return "";
+        const start = cursor;
+        const end = cursor + percentage * 3.6;
+        cursor = end;
+        return `${this.planColor(plan.key)} ${start}deg ${end}deg`;
+      })
+      .filter(Boolean);
+
+    return `conic-gradient(${segments.join(", ")})`;
+  }
+
+  chartBarHeight(plan: SubscriptionPlan): number {
+    const max = Math.max(
+      1,
+      ...this.allPlanRows.map((item) => Number(this.distributionFor(item.key).count || 0)),
+    );
+    const count = Number(this.distributionFor(plan).count || 0);
+    return Math.max(count ? 8 : 0, Math.round((count / max) * 100));
   }
 
   planColor(plan: string): string {

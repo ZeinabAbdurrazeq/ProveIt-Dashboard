@@ -55,7 +55,7 @@ const emptyForm = (): ProblemForm => ({
             <h2 class="mt-2 text-2xl font-bold text-base-content">Problems</h2>
             <p class="mt-2 max-w-2xl text-sm text-base-content/60">Create, update, archive, and delete platform coding problems.</p>
           </div>
-          <div class="grid w-full gap-3 sm:grid-cols-2 xl:max-w-3xl xl:grid-cols-[1fr_160px_auto_auto]">
+          <div class="grid w-full gap-3 sm:grid-cols-2 xl:max-w-3xl xl:grid-cols-[1fr_160px_auto]">
             <input class="admin-input" type="text" placeholder="Search title, id, or category" [(ngModel)]="searchTerm" (keydown.enter)="search()" />
             <select class="select select-bordered w-full sm:max-w-44" [(ngModel)]="difficultyFilter" (change)="search()">
               <option value="">All levels</option>
@@ -64,7 +64,6 @@ const emptyForm = (): ProblemForm => ({
               <option value="Hard">Hard</option>
             </select>
             <button class="admin-button-secondary" type="button" (click)="search()">Search</button>
-            <button class="admin-button" type="button" (click)="startCreate()">New problem</button>
           </div>
         </div>
       </section>
@@ -110,7 +109,7 @@ const emptyForm = (): ProblemForm => ({
                     <button class="admin-button-secondary" type="button" (click)="toggleActive(problem)">
                       {{ problem.active ? 'Archive' : 'Activate' }}
                     </button>
-                    <button class="rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-100" type="button" (click)="deleteProblem(problem)">Delete</button>
+                    <button class="rounded-2xl border border-red-600 bg-red-50 px-4 py-2 text-sm font-bold text-red-700 transition hover:bg-red-100" type="button" (click)="deleteProblem(problem)">Delete</button>
                   </div>
                 </div>
               </article>
