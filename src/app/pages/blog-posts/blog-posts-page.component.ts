@@ -47,7 +47,7 @@ const emptyForm = (): BlogForm => ({
         {{ error }}
       </section>
 
-      <section class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(340px,520px)]">
+      <section class="space-y-6">
         <div class="admin-panel overflow-hidden p-0">
           <div *ngIf="loading" class="p-8 text-base-content/70">Loading posts...</div>
 

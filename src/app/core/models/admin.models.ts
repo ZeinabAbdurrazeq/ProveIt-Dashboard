@@ -1,7 +1,7 @@
 ﻿export type AdminRole = "user" | "admin";
 export type SessionStatus = "active" | "completed";
 export type InterviewStatus = "in-progress" | "completed";
-export type SubscriptionPlan = "free" | "pro" | "premium";
+export type SubscriptionPlan = "free" | "singleInterview" | "pro" | "premium";
 export type ProblemDifficulty = "Easy" | "Medium" | "Hard";
 
 export interface AdminLoginResponse {

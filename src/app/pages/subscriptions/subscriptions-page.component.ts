@@ -5,8 +5,73 @@ import { finalize } from "rxjs";
 import { AdminApiService } from "../../core/services/admin-api.service";
 import {
   DashboardStatsResponse,
+  SubscriptionPlan,
   SubscriptionDistributionItem,
 } from "../../core/models/admin.models";
+
+type PlanDefinition = {
+  key: SubscriptionPlan;
+  name: string;
+  price: string;
+  billing: string;
+  allowance: string;
+  features: string[];
+  recommended?: boolean;
+  hidden?: boolean;
+};
+
+const PLAN_DEFINITIONS: PlanDefinition[] = [
+  {
+    key: "free",
+    name: "Free",
+    price: "$0.00",
+    billing: "forever",
+    allowance: "0 AI interviews/month",
+    features: [
+      "Unlimited coding problems",
+      "Unlimited live sessions",
+      "Basic progress tracking",
+      "AI interviews sold separately",
+    ],
+  },
+  {
+    key: "singleInterview",
+    name: "AI Interview",
+    price: "$10.00",
+    billing: "per interview",
+    allowance: "1 CV-aware AI interview credit",
+    features: [
+      "One CV-aware AI interview",
+      "Detailed scorecard",
+      "Role-focused questions",
+      "Problems and sessions stay free",
+    ],
+    recommended: true,
+  },
+  {
+    key: "premium",
+    name: "Premium",
+    price: "$70.00",
+    billing: "per month",
+    allowance: "10 AI interviews/month",
+    features: [
+      "10 AI interviews per month",
+      "Unlimited CV re-uploads",
+      "Advanced analytics",
+      "Early access to new features",
+      "Priority support",
+    ],
+  },
+  {
+    key: "pro",
+    name: "Legacy Pro",
+    price: "$9.99",
+    billing: "per month",
+    allowance: "10 AI interviews/month",
+    features: ["Legacy paid plan"],
+    hidden: true,
+  },
+];
 
 @Component({
   selector: "app-subscriptions-page",
@@ -35,11 +100,11 @@ import {
       <section *ngIf="!loading && !error" class="space-y-6">
         <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <article class="admin-panel p-5">
-            <p class="text-sm font-medium text-base-content/70">Active subscriptions</p>
+            <p class="text-sm font-medium text-base-content/70">Active paid access</p>
             <p class="mt-3 text-3xl font-black text-base-content">
               {{ stats?.activeSubscriptions || 0 }}
             </p>
-            <p class="mt-2 text-xs text-base-content/60">Paid plans currently active</p>
+            <p class="mt-2 text-xs text-base-content/60">Premium, legacy Pro, or interview credits</p>
           </article>
 
           <article class="admin-panel p-5">
@@ -53,62 +118,66 @@ import {
           <article class="admin-panel p-5">
             <p class="text-sm font-medium text-base-content/70">Paid ratio</p>
             <p class="mt-3 text-3xl font-black text-base-content">{{ paidRatio }}%</p>
-            <p class="mt-2 text-xs text-base-content/60">Pro and premium share</p>
+            <p class="mt-2 text-xs text-base-content/60">AI Interview, Premium, and legacy Pro share</p>
           </article>
 
           <article class="admin-panel p-5">
             <p class="text-sm font-medium text-base-content/70">Plans</p>
             <p class="mt-3 text-3xl font-black text-base-content">
-              {{ subscriptionDistribution.length }}
+              {{ visiblePlans.length }}
             </p>
-            <p class="mt-2 text-xs text-base-content/60">Distribution groups returned by backend</p>
+            <p class="mt-2 text-xs text-base-content/60">Current public plan options</p>
           </article>
         </div>
 
-        <div class="grid gap-5 md:grid-cols-3">
+        <div class="grid gap-5 lg:grid-cols-3">
           <article
-            *ngFor="let plan of subscriptionDistribution"
-            class="admin-panel p-5"
+            *ngFor="let plan of visiblePlans"
+            class="admin-panel flex flex-col p-5"
+            [ngClass]="plan.recommended ? 'border-primary/35 shadow-lg shadow-primary/10' : ''"
           >
             <div class="flex items-center justify-between gap-3">
               <div>
                 <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">
-                  Plan
+                  {{ plan.billing }}
                 </p>
-                <h2 class="mt-2 text-2xl font-bold capitalize text-base-content">
-                  {{ plan.plan }}
+                <h2 class="mt-2 text-2xl font-bold text-base-content">
+                  {{ plan.name }}
                 </h2>
               </div>
-              <span class="rounded-full border border-success/20 bg-success/10 px-3 py-1 text-sm font-bold text-success">
-                {{ plan.percentage }}%
+              <span
+                class="rounded-full border px-3 py-1 text-sm font-bold"
+                [ngClass]="plan.recommended ? 'border-primary/25 bg-primary/10 text-primary' : 'border-base-300 bg-base-200 text-base-content/70'"
+              >
+                {{ plan.recommended ? 'Current offer' : plan.price }}
               </span>
             </div>
 
-            <div class="mt-6 flex items-center justify-center">
-              <div
-                class="relative h-40 w-40 rounded-full"
-                [style.background]="subscriptionRingStyle(plan.plan, plan.percentage)"
-              >
-                <div class="absolute inset-3 rounded-full bg-base-100 p-4 text-center shadow-inner">
-                  <div class="grid h-full place-items-center rounded-full border border-base-300 bg-base-200">
-                    <div>
-                      <p class="text-3xl font-black text-base-content">
-                        {{ plan.count }}
-                      </p>
-                      <p class="mt-1 text-xs uppercase tracking-[0.24em] text-base-content/60">
-                        users
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div class="mt-5">
+              <p class="text-4xl font-black text-base-content">{{ plan.price }}</p>
+              <p class="mt-1 text-sm font-semibold text-base-content/65">{{ plan.allowance }}</p>
             </div>
 
-            <div class="mt-6 h-3 overflow-hidden rounded-full bg-base-200">
-              <div
-                class="h-full rounded-full bg-primary"
-                [style.width.%]="plan.percentage"
-              ></div>
+            <ul class="mt-5 flex-1 space-y-3">
+              <li *ngFor="let feature of plan.features" class="flex gap-2 text-sm text-base-content/75">
+                <span class="mt-1 h-2 w-2 shrink-0 rounded-full bg-primary"></span>
+                <span>{{ feature }}</span>
+              </li>
+            </ul>
+
+            <div class="mt-6 rounded-3xl border border-base-300 bg-base-200/70 p-4">
+              <div class="flex items-center justify-between gap-3">
+                <span class="text-sm font-semibold text-base-content/70">Users in admin data</span>
+                <span class="text-xl font-black text-base-content">{{ distributionFor(plan.key).count }}</span>
+              </div>
+              <div class="mt-3 h-2 overflow-hidden rounded-full bg-base-100">
+                <div
+                  class="h-full rounded-full"
+                  [style.background]="planColor(plan.key)"
+                  [style.width.%]="distributionFor(plan.key).percentage"
+                ></div>
+              </div>
+              <p class="mt-2 text-xs text-base-content/55">{{ distributionFor(plan.key).percentage }}% of tracked subscriptions</p>
             </div>
           </article>
         </div>
@@ -136,10 +205,15 @@ import {
                 </tr>
               </thead>
               <tbody class="divide-y divide-base-300 bg-base-100">
-                <tr *ngFor="let plan of subscriptionDistribution">
-                  <td class="admin-td font-semibold capitalize">{{ plan.plan }}</td>
-                  <td class="admin-td">{{ plan.count }}</td>
-                  <td class="admin-td">{{ plan.percentage }}%</td>
+                <tr *ngFor="let plan of allPlanRows">
+                  <td class="admin-td">
+                    <div>
+                      <p class="font-semibold text-base-content">{{ plan.name }}</p>
+                      <p class="mt-1 text-xs text-base-content/55">{{ plan.hidden ? 'Hidden legacy plan' : plan.billing }}</p>
+                    </div>
+                  </td>
+                  <td class="admin-td">{{ distributionFor(plan.key).count }}</td>
+                  <td class="admin-td">{{ distributionFor(plan.key).percentage }}%</td>
                 </tr>
               </tbody>
             </table>
@@ -199,19 +273,32 @@ export class SubscriptionsPageComponent implements OnInit {
     return Math.round((paid / total) * 1000) / 10;
   }
 
-  subscriptionRingStyle(
-    plan: string,
-    percentage: number,
-  ): Record<string, string> {
-    const value = Math.max(0, Math.min(percentage || 0, 100));
+  get visiblePlans(): PlanDefinition[] {
+    return PLAN_DEFINITIONS.filter((plan) => !plan.hidden);
+  }
+
+  get allPlanRows(): PlanDefinition[] {
+    return PLAN_DEFINITIONS;
+  }
+
+  distributionFor(plan: SubscriptionPlan): SubscriptionDistributionItem {
+    return (
+      this.subscriptionDistribution.find((item) => item.plan === plan) || {
+        plan,
+        count: 0,
+        percentage: 0,
+      }
+    );
+  }
+
+  planColor(plan: string): string {
     const colors: Record<string, string> = {
       free: "rgba(148, 163, 184, 0.95)",
+      singleInterview: "rgba(139, 92, 246, 0.95)",
       pro: "rgba(16, 185, 129, 0.95)",
       premium: "rgba(59, 130, 246, 0.95)",
     };
 
-    return {
-      background: `conic-gradient(${colors[plan] || colors["free"]} ${value * 3.6}deg, color-mix(in srgb, var(--admin-muted) 18%, transparent) 0deg)`,
-    };
+    return colors[plan] || colors["free"];
   }
 }

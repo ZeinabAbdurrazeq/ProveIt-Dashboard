@@ -104,7 +104,7 @@ const emptyForm = (): UserForm => ({
                         <button class="admin-button-secondary !px-3 !py-2" type="button" (click)="toggleRole(user)">
                           {{ user.role === 'admin' ? 'Make user' : 'Make admin' }}
                         </button>
-                        <button class="rounded-2xl border border-red-400/20 bg-red-500/10 px-3 py-2 text-sm font-semibold text-red-100" type="button" (click)="deleteUser(user)">Delete</button>
+                        <button class="rounded-2xl border border-red-600 bg-red-50 px-3 py-2 text-sm font-bold text-red-700 transition hover:bg-red-100" type="button" (click)="deleteUser(user)">Delete</button>
                       </div>
                     </td>
                   </tr>

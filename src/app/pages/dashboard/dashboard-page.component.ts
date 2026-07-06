@@ -317,7 +317,7 @@ export class DashboardPageComponent implements OnInit {
           color: "rgba(148, 163, 184, 0.12)",
         },
         ticks: {
-          color: "rgba(226, 232, 240, 0.75)",
+          color: "#111827",
           maxRotation: 0,
           autoSkip: true,
         },
@@ -328,7 +328,7 @@ export class DashboardPageComponent implements OnInit {
           color: "rgba(148, 163, 184, 0.12)",
         },
         ticks: {
-          color: "rgba(226, 232, 240, 0.75)",
+          color: "#111827",
         },
       },
     },
@@ -361,7 +361,7 @@ export class DashboardPageComponent implements OnInit {
           display: false,
         },
         ticks: {
-          color: "rgba(226, 232, 240, 0.75)",
+          color: "#111827",
           maxRotation: 0,
         },
       },
@@ -371,7 +371,7 @@ export class DashboardPageComponent implements OnInit {
           color: "rgba(148, 163, 184, 0.12)",
         },
         ticks: {
-          color: "rgba(226, 232, 240, 0.75)",
+          color: "#111827",
         },
       },
     },
@@ -528,7 +528,7 @@ export class DashboardPageComponent implements OnInit {
   }
 
   formatCompact(value: number): string {
-    return new Intl.NumberFormat("ar", {
+    return new Intl.NumberFormat("en-US", {
       notation: "compact",
       maximumFractionDigits: 1,
     }).format(value || 0);
@@ -553,7 +553,7 @@ export class DashboardPageComponent implements OnInit {
   }
 
   formatDate(value: string): string {
-    return new Intl.DateTimeFormat("ar", {
+    return new Intl.DateTimeFormat("en-US", {
       month: "short",
       day: "numeric",
     }).format(new Date(`${value}T00:00:00`));

@@ -73,8 +73,13 @@ const emptyForm = (): ProblemForm => ({
         {{ error }}
       </section>
 
-      <section class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(360px,560px)]">
+      <section class="space-y-6">
         <div class="space-y-6">
+          <div class="admin-panel border-info/25 bg-info/10 p-5">
+            <p class="text-sm font-semibold text-base-content">Current website problems are loaded from the backend database.</p>
+            <p class="mt-2 text-sm leading-6 text-base-content/65">This page reads and updates MongoDB problem records through the admin API, not a local JSON file.</p>
+          </div>
+
           <div class="admin-panel overflow-hidden p-0">
             <div *ngIf="loading" class="p-8 text-base-content/70">Loading problems...</div>
 
