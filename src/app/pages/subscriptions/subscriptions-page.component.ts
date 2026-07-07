@@ -7,6 +7,7 @@ import {
   DashboardStatsResponse,
   SubscriptionPlan,
   SubscriptionDistributionItem,
+  SubscriptionPlanUser,
 } from "../../core/models/admin.models";
 
 type PlanDefinition = {
@@ -244,6 +245,84 @@ const PLAN_DEFINITIONS: PlanDefinition[] = [
           <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">
+                Users
+              </p>
+              <h2 class="mt-2 text-xl font-bold text-base-content">
+                Users in each plan
+              </h2>
+            </div>
+            <span class="admin-chip">{{ totalSubscriptionUsers }} total users</span>
+          </div>
+
+          <div class="mt-5 grid gap-4 xl:grid-cols-2">
+            <article
+              *ngFor="let plan of allPlanRows"
+              class="rounded-3xl border border-base-300 bg-base-100 p-4"
+            >
+              <div class="flex items-center justify-between gap-3">
+                <div class="flex min-w-0 items-center gap-3">
+                  <span class="h-3 w-3 shrink-0 rounded-full" [style.background]="planColor(plan.key)"></span>
+                  <div class="min-w-0">
+                    <h3 class="truncate font-bold text-base-content">{{ plan.name }}</h3>
+                    <p class="text-xs text-base-content/55">{{ usersForPlan(plan.key).length }} users</p>
+                  </div>
+                </div>
+                <span class="rounded-full border border-base-300 bg-base-200 px-3 py-1 text-xs font-bold text-base-content/70">
+                  {{ distributionFor(plan.key).percentage }}%
+                </span>
+              </div>
+
+              <div class="mt-4 max-h-80 space-y-2 overflow-y-auto pr-1">
+                <div
+                  *ngFor="let user of usersForPlan(plan.key)"
+                  class="flex items-center gap-3 rounded-2xl border border-base-300 bg-base-200/70 p-3"
+                >
+                  <img
+                    *ngIf="user.profileImage; else userInitials"
+                    [src]="user.profileImage"
+                    [alt]="user.name"
+                    class="h-10 w-10 shrink-0 rounded-full object-cover"
+                  />
+                  <ng-template #userInitials>
+                    <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary/10 text-sm font-black text-primary">
+                      {{ initials(user.name || user.email) }}
+                    </div>
+                  </ng-template>
+
+                  <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-2">
+                      <p class="truncate text-sm font-bold text-base-content">{{ user.name || 'Unnamed user' }}</p>
+                      <span class="rounded-full px-2 py-0.5 text-[11px] font-bold"
+                        [ngClass]="user.status === 'cancelled' ? 'bg-warning/15 text-warning' : 'bg-success/15 text-success'"
+                      >
+                        {{ user.status }}
+                      </span>
+                    </div>
+                    <p class="truncate text-xs text-base-content/55">{{ user.email }}</p>
+                    <p class="mt-1 text-[11px] text-base-content/50">
+                      {{ usageLabel(user) }}
+                      <span *ngIf="user.currentPeriodEnd">
+                        · until {{ user.currentPeriodEnd | date:'mediumDate' }}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+
+                <div
+                  *ngIf="!usersForPlan(plan.key).length"
+                  class="rounded-2xl border border-dashed border-base-300 p-5 text-center text-sm text-base-content/55"
+                >
+                  No users in this plan.
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="admin-panel p-5">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">
                 Distribution
               </p>
               <h2 class="mt-2 text-xl font-bold text-base-content">
@@ -341,6 +420,7 @@ export class SubscriptionsPageComponent implements OnInit {
   error = "";
   stats: DashboardStatsResponse | null = null;
   subscriptionDistribution: SubscriptionDistributionItem[] = [];
+  subscriptionPlanUsers: DashboardStatsResponse["subscriptionPlanUsers"] = [];
   skeletonArray = Array.from({ length: 3 });
 
   ngOnInit(): void {
@@ -358,6 +438,7 @@ export class SubscriptionsPageComponent implements OnInit {
         next: (stats) => {
           this.stats = stats;
           this.subscriptionDistribution = stats.subscriptionDistribution || [];
+          this.subscriptionPlanUsers = stats.subscriptionPlanUsers || [];
         },
         error: (error) => {
           this.error =
@@ -400,6 +481,33 @@ export class SubscriptionsPageComponent implements OnInit {
         percentage: 0,
       }
     );
+  }
+
+  usersForPlan(plan: SubscriptionPlan): SubscriptionPlanUser[] {
+    return (
+      this.subscriptionPlanUsers.find((item) => item.plan === plan)?.users || []
+    );
+  }
+
+  initials(value = ""): string {
+    const parts = value.trim().split(/\s+/).filter(Boolean);
+    if (!parts.length) return "?";
+    return parts
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase() || "")
+      .join("");
+  }
+
+  usageLabel(user: SubscriptionPlanUser): string {
+    if (user.aiInterviewCredits > 0) {
+      return `${user.aiInterviewCredits} interview credit${user.aiInterviewCredits === 1 ? "" : "s"}`;
+    }
+
+    if (user.aiInterviewsLimit > 0) {
+      return `${user.aiInterviewsUsedThisMonth || 0}/${user.aiInterviewsLimit} interviews used`;
+    }
+
+    return "No paid interview allowance";
   }
 
   distributionDonutStyle(): string {

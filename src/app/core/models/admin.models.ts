@@ -111,6 +111,24 @@ export interface SubscriptionDistributionItem {
   percentage: number;
 }
 
+export interface SubscriptionPlanUser {
+  _id: string;
+  name: string;
+  email: string;
+  profileImage?: string;
+  role: AdminRole;
+  status: "active" | "cancelled" | "expired";
+  currentPeriodEnd?: string | null;
+  aiInterviewsLimit: number;
+  aiInterviewsUsedThisMonth: number;
+  aiInterviewCredits: number;
+}
+
+export interface SubscriptionPlanUsersItem {
+  plan: SubscriptionPlan;
+  users: SubscriptionPlanUser[];
+}
+
 export interface DashboardStatsResponse {
   totalUsers: number;
   totalSessions: number;
@@ -119,6 +137,7 @@ export interface DashboardStatsResponse {
   activeSubscriptions: number;
   pendingInvitations: number;
   subscriptionDistribution: SubscriptionDistributionItem[];
+  subscriptionPlanUsers: SubscriptionPlanUsersItem[];
 }
 
 export interface TimeSeriesPoint {
