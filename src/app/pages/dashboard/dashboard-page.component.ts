@@ -25,9 +25,9 @@ interface StatCard {
   standalone: true,
   imports: [CommonModule, BaseChartDirective],
   template: `
-    <div class="space-y-6">
-      <section *ngIf="loading" class="space-y-6">
-        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
+    <div class="space-y-4 sm:space-y-6">
+      <section *ngIf="loading" class="space-y-4 sm:space-y-6">
+        <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6">
           <div *ngFor="let _ of skeletonArray" class="admin-panel p-5">
             <div class="h-3 w-24 animate-pulse rounded-full bg-base-300"></div>
             <div
@@ -38,7 +38,7 @@ interface StatCard {
             ></div>
           </div>
         </div>
-        <div class="grid gap-6 xl:grid-cols-2">
+        <div class="grid gap-4 sm:gap-6 lg:grid-cols-2">
           <div class="admin-panel p-5">
             <div class="h-72 animate-pulse rounded-3xl bg-base-200"></div>
           </div>
@@ -46,7 +46,7 @@ interface StatCard {
             <div class="h-72 animate-pulse rounded-3xl bg-base-200"></div>
           </div>
         </div>
-        <div class="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+        <div class="grid gap-4 sm:gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <div class="admin-panel p-5">
             <div class="h-80 animate-pulse rounded-3xl bg-base-200"></div>
           </div>
@@ -71,8 +71,8 @@ interface StatCard {
         </button>
       </section>
 
-      <section *ngIf="!loading && !error" class="space-y-6">
-        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
+      <section *ngIf="!loading && !error" class="space-y-4 sm:space-y-6">
+        <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6">
           <article
             *ngFor="let card of statCards"
             class="admin-panel admin-metric-card group relative overflow-hidden p-5 transition hover:-translate-y-1"
@@ -99,7 +99,7 @@ interface StatCard {
           </article>
         </div>
 
-        <div class="grid gap-6 xl:grid-cols-2">
+        <div class="grid gap-4 sm:gap-6 lg:grid-cols-2">
           <section class="admin-panel p-5">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
@@ -112,7 +112,7 @@ interface StatCard {
               </div>
               <span class="admin-chip">Last 30 days</span>
             </div>
-            <div class="mt-5 h-[320px]">
+            <div class="mt-5 h-[250px] sm:h-[320px]">
               <canvas
                 baseChart
                 [data]="sessionsChartData"
@@ -134,7 +134,7 @@ interface StatCard {
               </div>
               <span class="admin-chip">Last 30 days</span>
             </div>
-            <div class="mt-5 h-[320px]">
+            <div class="mt-5 h-[250px] sm:h-[320px]">
               <canvas
                 baseChart
                 [data]="interviewsChartData"
@@ -145,7 +145,7 @@ interface StatCard {
           </section>
         </div>
 
-        <div class="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
+        <div class="grid gap-4 sm:gap-6 lg:grid-cols-[1.15fr_0.85fr]">
           <section class="admin-panel p-5">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
