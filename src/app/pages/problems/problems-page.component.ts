@@ -53,7 +53,9 @@ const emptyForm = (): ProblemForm => ({
           <div>
             <p class="text-sm uppercase tracking-[0.24em] text-base-content/60">Problem bank</p>
             <h2 class="mt-2 text-2xl font-bold text-base-content">Problems</h2>
-            <p class="mt-2 max-w-2xl text-sm text-base-content/60">Create, update, archive, and delete platform coding problems.</p>
+            <p class="mt-2 max-w-2xl text-sm text-base-content/60">
+              View the platform problem bank with the same search and difficulty filters used by learners.
+            </p>
           </div>
           <div class="grid w-full gap-3 sm:grid-cols-2 xl:max-w-3xl xl:grid-cols-[1fr_160px_auto]">
             <input class="admin-input" type="text" placeholder="Search title, id, or category" [(ngModel)]="searchTerm" (keydown.enter)="search()" />
@@ -75,8 +77,14 @@ const emptyForm = (): ProblemForm => ({
       <section class="space-y-6">
         <div class="space-y-6">
           <div class="admin-panel border-info/25 bg-info/10 p-5">
-            <p class="text-sm font-semibold text-base-content">Current website problems are loaded from the backend database.</p>
-            <p class="mt-2 text-sm leading-6 text-base-content/65">This page reads and updates MongoDB problem records through the admin API, not a local JSON file.</p>
+            <p class="text-sm font-semibold text-base-content">
+              {{ usingHardcodedProblems ? 'Showing hardcoded website problems.' : 'Showing database problems.' }}
+            </p>
+            <p class="mt-2 text-sm leading-6 text-base-content/65">
+              {{ usingHardcodedProblems
+                ? 'The MongoDB problem collection is empty, so this page displays the same hardcoded problems used by the main app. Editing is disabled in this mode.'
+                : 'This page reads and updates MongoDB problem records through the admin API.' }}
+            </p>
           </div>
 
           <div class="admin-panel overflow-hidden p-0">
@@ -84,7 +92,7 @@ const emptyForm = (): ProblemForm => ({
 
             <div *ngIf="!loading && problems.length === 0" class="p-10 text-center text-base-content/60">
               <p class="text-lg font-semibold text-base-content">No problems found</p>
-              <p class="mt-2 text-sm">Create the first problem from the editor.</p>
+              <p class="mt-2 text-sm">No hardcoded or database problems match the current filters.</p>
             </div>
 
             <div *ngIf="!loading && problems.length" class="divide-y divide-base-300">
@@ -104,7 +112,7 @@ const emptyForm = (): ProblemForm => ({
                     <p class="mt-2 break-words text-sm text-base-content/65">{{ problem.description.text || 'No description yet.' }}</p>
                     <p class="mt-2 font-mono text-xs text-base-content/45">/{{ problem.id }}</p>
                   </div>
-                  <div class="flex shrink-0 flex-wrap gap-2">
+                  <div *ngIf="!usingHardcodedProblems" class="flex shrink-0 flex-wrap gap-2">
                     <button class="admin-button-secondary" type="button" (click)="startEdit(problem)">Edit</button>
                     <button class="admin-button-secondary" type="button" (click)="toggleActive(problem)">
                       {{ problem.active ? 'Archive' : 'Activate' }}
@@ -125,7 +133,7 @@ const emptyForm = (): ProblemForm => ({
           </section>
         </div>
 
-        <form class="admin-panel problem-editor-panel space-y-5 p-5" (ngSubmit)="saveProblem()">
+        <form *ngIf="!usingHardcodedProblems" class="admin-panel problem-editor-panel space-y-5 p-5" (ngSubmit)="saveProblem()">
           <div>
             <p class="text-sm uppercase tracking-[0.24em] text-base-content/70">{{ editingId ? 'Edit problem' : 'Create problem' }}</p>
             <h3 class="mt-2 text-xl font-bold text-base-content">{{ form.title || 'Untitled problem' }}</h3>
@@ -242,8 +250,13 @@ export class ProblemsPageComponent implements OnInit {
   difficultyFilter = "";
   editingId = "";
   idTouched = false;
+  problemSource: "database" | "hardcoded" = "database";
   problems: AdminProblem[] = [];
   form: ProblemForm = emptyForm();
+
+  get usingHardcodedProblems(): boolean {
+    return this.problemSource === "hardcoded";
+  }
 
   ngOnInit(): void {
     this.loadProblems();
@@ -348,6 +361,7 @@ export class ProblemsPageComponent implements OnInit {
           this.problems = response.problems || [];
           this.page = response.page;
           this.totalPages = response.totalPages;
+          this.problemSource = response.source || "database";
         },
         error: (error) => {
           this.error = error?.error?.msg || "The problems list could not be loaded.";

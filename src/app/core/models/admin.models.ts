@@ -223,6 +223,7 @@ export interface AdminProblem {
 
 export interface ProblemsResponse extends PaginationMeta {
   problems: AdminProblem[];
+  source?: "database" | "hardcoded";
 }
 
 export interface ProblemResponse {
