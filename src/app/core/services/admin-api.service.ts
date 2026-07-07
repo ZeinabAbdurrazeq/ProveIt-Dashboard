@@ -19,6 +19,9 @@ import {
   AdminBlogPost,
   BlogPostResponse,
   BlogPostsResponse,
+  CommunityPostResponse,
+  CommunityPostsResponse,
+  CommunityPostStatus,
   ProblemResponse,
   ProblemsResponse,
   ApiMessageResponse,
@@ -162,5 +165,26 @@ export class AdminApiService {
 
   deleteBlogPost(id: string): Observable<ApiMessageResponse> {
     return this.http.delete<ApiMessageResponse>(`${this.apiBaseUrl}/blog-posts/${id}`);
+  }
+
+  getCommunityPosts(status: CommunityPostStatus = "pending"): Observable<CommunityPostsResponse> {
+    const params = new HttpParams().set("status", status);
+    return this.http.get<CommunityPostsResponse>(`${this.apiBaseUrl}/community-posts`, {
+      params,
+    });
+  }
+
+  approveCommunityPost(id: string): Observable<CommunityPostResponse> {
+    return this.http.patch<CommunityPostResponse>(
+      `${this.apiBaseUrl}/community-posts/${id}/approve`,
+      {},
+    );
+  }
+
+  rejectCommunityPost(id: string, reason = ""): Observable<CommunityPostResponse> {
+    return this.http.patch<CommunityPostResponse>(
+      `${this.apiBaseUrl}/community-posts/${id}/reject`,
+      { reason },
+    );
   }
 }

@@ -3,6 +3,7 @@ export type SessionStatus = "active" | "completed";
 export type InterviewStatus = "in-progress" | "completed";
 export type SubscriptionPlan = "free" | "singleInterview" | "pro" | "premium";
 export type ProblemDifficulty = "Easy" | "Medium" | "Hard";
+export type CommunityPostStatus = "pending" | "approved" | "rejected";
 
 export interface AdminLoginResponse {
   admin: {
@@ -277,4 +278,56 @@ export interface BlogPostsResponse {
 
 export interface BlogPostResponse {
   post: AdminBlogPost;
+}
+
+export interface CommunityPostAuthor {
+  _id: string;
+  name: string;
+  email?: string;
+  profileImage?: string;
+  level?: string;
+}
+
+export interface CommunityPostModerationEvent {
+  action: "submitted" | "edited" | "approved" | "rejected";
+  by?: string | CommunityPostAuthor | null;
+  note?: string;
+  createdAt: string;
+}
+
+export interface CommunityPost {
+  _id: string;
+  postType: "community";
+  title?: string;
+  slug: string;
+  content: string;
+  imageUrl?: string;
+  status: CommunityPostStatus;
+  author: CommunityPostAuthor | null;
+  date?: string;
+  createdAt: string;
+  updatedAt?: string;
+  approvedAt?: string | null;
+  rejectedAt?: string | null;
+  rejectionReason?: string;
+  reactionCounts: {
+    like: number;
+    celebrate: number;
+    insightful: number;
+  };
+  comments: Array<{
+    _id: string;
+    content: string;
+    createdAt: string;
+    author: CommunityPostAuthor | null;
+  }>;
+  moderationHistory?: CommunityPostModerationEvent[];
+}
+
+export interface CommunityPostsResponse {
+  posts: CommunityPost[];
+}
+
+export interface CommunityPostResponse {
+  post: CommunityPost;
 }
