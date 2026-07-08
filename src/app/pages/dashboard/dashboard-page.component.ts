@@ -468,14 +468,6 @@ export class DashboardPageComponent implements OnInit {
           "bg-gradient-to-br from-amber-500/20 via-slate-900 to-slate-950",
       },
       {
-        label: "Avg AI Score",
-        value: Math.round(stats.averageAiScore),
-        icon: "◔",
-        hint: "Average score across completed interviews",
-        gradient:
-          "bg-gradient-to-br from-emerald-500/20 via-slate-900 to-slate-950",
-      },
-      {
         label: "Active Subscriptions",
         value: stats.activeSubscriptions,
         icon: "⎔",
