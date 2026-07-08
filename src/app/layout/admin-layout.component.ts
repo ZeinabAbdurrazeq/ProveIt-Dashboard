@@ -43,8 +43,8 @@ const DEFAULT_THEME: AdminTheme = "corporate";
         >
           <div class="admin-sidebar-header flex items-center justify-between gap-3 px-5">
             <div class="flex items-center gap-3 overflow-hidden">
-              <div class="admin-brand-mark grid h-11 w-11 place-items-center overflow-hidden rounded-2xl bg-primary text-primary-content">
-                <span class="text-lg font-bold">&lt;/&gt;</span>
+              <div class="admin-brand-mark grid h-11 w-11 place-items-center overflow-hidden rounded-2xl">
+                <img src="/logo4.jpg" alt="ProveIt" class="h-full w-full object-cover" />
               </div>
               <div class="min-w-0">
                 <p class="text-xl font-extrabold tracking-tight">ProveIt</p>

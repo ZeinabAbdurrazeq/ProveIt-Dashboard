@@ -76,6 +76,16 @@ const emptyForm = (): ProblemForm => ({
 
       <section class="space-y-6">
         <div class="space-y-6">
+          <div class="admin-panel border-info/25 bg-info/10 p-5">
+            <p class="text-sm font-semibold text-base-content">
+              {{ usingHardcodedProblems ? 'Showing hardcoded website problems.' : 'Showing database problems.' }}
+            </p>
+            <p class="mt-2 text-sm leading-6 text-base-content/65">
+              {{ usingHardcodedProblems
+                ? 'The MongoDB problem collection is empty, so this page displays the same hardcoded problems used by the main app. Editing is disabled in this mode.'
+                : 'This page reads and updates MongoDB problem records through the admin API.' }}
+            </p>
+          </div>
 
           <div class="admin-panel overflow-hidden p-0">
             <div *ngIf="loading" class="p-8 text-base-content/70">Loading problems...</div>
@@ -102,7 +112,7 @@ const emptyForm = (): ProblemForm => ({
                     <p class="mt-2 break-words text-sm text-base-content/65">{{ problem.description.text || 'No description yet.' }}</p>
                     <p class="mt-2 font-mono text-xs text-base-content/45">/{{ problem.id }}</p>
                   </div>
-                  <div class="flex shrink-0 flex-wrap gap-2">
+                  <div *ngIf="!usingHardcodedProblems" class="flex shrink-0 flex-wrap gap-2">
                     <button class="admin-button-secondary" type="button" (click)="startEdit(problem)">Edit</button>
                     <button class="admin-button-secondary" type="button" (click)="toggleActive(problem)">
                       {{ problem.active ? 'Archive' : 'Activate' }}
@@ -123,7 +133,7 @@ const emptyForm = (): ProblemForm => ({
           </section>
         </div>
 
-        <form class="admin-panel problem-editor-panel space-y-5 p-5" (ngSubmit)="saveProblem()">
+        <form *ngIf="!usingHardcodedProblems" class="admin-panel problem-editor-panel space-y-5 p-5" (ngSubmit)="saveProblem()">
           <div>
             <p class="text-sm uppercase tracking-[0.24em] text-base-content/70">{{ editingId ? 'Edit problem' : 'Create problem' }}</p>
             <h3 class="mt-2 text-xl font-bold text-base-content">{{ form.title || 'Untitled problem' }}</h3>
