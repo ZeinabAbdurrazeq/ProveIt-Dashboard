@@ -17,7 +17,7 @@ import { AdminApiService } from "../../core/services/admin-api.service";
       <section class="admin-panel p-5">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p class="admin-chip w-fit">Community moderation</p>
+            <p class="admin-chip w-fit">Posts Review</p>
             <h2 class="mt-3 text-2xl font-extrabold">Review community posts</h2>
             <p class="mt-2 max-w-2xl text-sm text-base-content/60">
               Approve helpful posts for the public feed or reject posts that need to stay hidden.
@@ -97,10 +97,13 @@ import { AdminApiService } from "../../core/services/admin-api.service";
               class="mt-4 max-h-64 w-full rounded-3xl border border-base-300 object-cover"
             />
 
-            <div class="mt-4 grid gap-2 text-xs text-base-content/60 sm:grid-cols-3">
-              <span>Likes: {{ post.reactionCounts.like || 0 }}</span>
-              <span>Celebrates: {{ post.reactionCounts.celebrate || 0 }}</span>
-              <span>Insightful: {{ post.reactionCounts.insightful || 0 }}</span>
+            <div class="mt-4 flex flex-wrap gap-3 text-xs text-base-content/60">
+              <span>👍 {{ post.reactionCounts.like || 0 }}</span>
+              <span>🤝 {{ post.reactionCounts.support || 0 }}</span>
+              <span>❤️ {{ post.reactionCounts.love || 0 }}</span>
+              <span>🎉 {{ post.reactionCounts.celebrate || 0 }}</span>
+              <span>😄 {{ post.reactionCounts.haha || 0 }}</span>
+              <span>😠 {{ post.reactionCounts.angry || 0 }}</span>
             </div>
 
             <div *ngIf="post.rejectionReason" class="mt-4 rounded-2xl border border-error/20 bg-error/10 p-3 text-sm text-error">

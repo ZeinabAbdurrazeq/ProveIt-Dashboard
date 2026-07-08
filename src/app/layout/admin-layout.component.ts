@@ -140,7 +140,7 @@ export class AdminLayoutComponent implements OnInit {
     { label: "Leaderboard", path: "/leaderboard", icon: "★" },
     { label: "Subscriptions", path: "/subscriptions", icon: "◉" },
     { label: "Blog", path: "/blog-posts", icon: "✎" },
-    { label: "Moderation", path: "/community-moderation", icon: "!" },
+    { label: "Posts Review", path: "/community-moderation", icon: "!" },
   ];
 
   readonly text = {

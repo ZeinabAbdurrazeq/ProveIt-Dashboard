@@ -1,4 +1,4 @@
-﻿import { Routes } from "@angular/router";
+import { Routes } from "@angular/router";
 
 import { authGuard } from "./core/guards/auth.guard";
 import { AdminLayoutComponent } from "./layout/admin-layout.component";
@@ -35,7 +35,7 @@ export const routes: Routes = [
       { path: "leaderboard", component: LeaderboardPageComponent, data: { title: "Leaderboard", titleEn: "Leaderboard" } },
       { path: "subscriptions", component: SubscriptionsPageComponent, data: { title: "Subscriptions", titleEn: "Subscriptions" } },
       { path: "blog-posts", component: BlogPostsPageComponent, data: { title: "Blog", titleEn: "Blog" } },
-      { path: "community-moderation", component: CommunityModerationPageComponent, data: { title: "Community moderation", titleEn: "Community moderation" } },
+      { path: "community-moderation", component: CommunityModerationPageComponent, data: { title: "Posts Review", titleEn: "Posts Review" } },
       { path: "**", redirectTo: "dashboard" },
     ],
   },

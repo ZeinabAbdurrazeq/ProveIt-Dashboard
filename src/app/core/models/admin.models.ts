@@ -1,4 +1,4 @@
-﻿export type AdminRole = "user" | "admin";
+export type AdminRole = "user" | "admin";
 export type SessionStatus = "active" | "completed";
 export type InterviewStatus = "in-progress" | "completed";
 export type SubscriptionPlan = "free" | "singleInterview" | "pro" | "premium";
@@ -312,8 +312,11 @@ export interface CommunityPost {
   rejectionReason?: string;
   reactionCounts: {
     like: number;
+    support: number;
+    love: number;
     celebrate: number;
-    insightful: number;
+    haha: number;
+    angry: number;
   };
   comments: Array<{
     _id: string;
