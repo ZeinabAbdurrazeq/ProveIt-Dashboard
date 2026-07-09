@@ -63,15 +63,6 @@ const PLAN_DEFINITIONS: PlanDefinition[] = [
       "Priority support",
     ],
   },
-  {
-    key: "pro",
-    name: "Legacy Pro",
-    price: "$9.99",
-    billing: "per month",
-    allowance: "10 AI interviews/month",
-    features: ["Legacy paid plan"],
-    hidden: true,
-  },
 ];
 
 @Component({
@@ -105,7 +96,7 @@ const PLAN_DEFINITIONS: PlanDefinition[] = [
             <p class="mt-3 text-3xl font-black text-base-content">
               {{ stats?.activeSubscriptions || 0 }}
             </p>
-            <p class="mt-2 text-xs text-base-content/60">Premium, legacy Pro, or interview credits</p>
+            <p class="mt-2 text-xs text-base-content/60">Premium or interview credits</p>
           </article>
 
           <article class="admin-panel p-5">
@@ -119,7 +110,7 @@ const PLAN_DEFINITIONS: PlanDefinition[] = [
           <article class="admin-panel p-5">
             <p class="text-sm font-medium text-base-content/70">Paid ratio</p>
             <p class="mt-3 text-3xl font-black text-base-content">{{ paidRatio }}%</p>
-            <p class="mt-2 text-xs text-base-content/60">AI Interview, Premium, and legacy Pro share</p>
+            <p class="mt-2 text-xs text-base-content/60">AI Interview and Premium share</p>
           </article>
 
           <article class="admin-panel p-5">
@@ -543,7 +534,6 @@ export class SubscriptionsPageComponent implements OnInit {
     const colors: Record<string, string> = {
       free: "rgba(148, 163, 184, 0.95)",
       singleInterview: "rgba(139, 92, 246, 0.95)",
-      pro: "rgba(16, 185, 129, 0.95)",
       premium: "rgba(59, 130, 246, 0.95)",
     };
 
